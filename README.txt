@@ -1,13 +1,18 @@
-আমার আমল — Mobile PWA
+আমার আমল v3
 
-ফাইলগুলো কোনো static hosting-এ upload করলেই app live হবে।
-Audio/MP3 নেই। সব progress এই ফোনের localStorage-এ থাকে।
+Mobile-first installable PWA for Android and iPhone/iPad.
 
-GitHub Pages:
-1) GitHub-এ নতুন public repo তৈরি করুন, যেমন amar-amal
-2) এই folder-এর index.html, manifest.webmanifest, sw.js, icon-192.png, icon-512.png upload করুন
-3) Repo > Settings > Pages
-4) Build and deployment: Deploy from a branch
-5) Branch: main, folder: /(root), Save
-6) GitHub যে URL দেখাবে সেটি Chrome-এ খুলুন
-7) Chrome menu > Install app / Add to Home screen
+Android: Chrome -> Install app / Add to Home screen.
+iPhone/iPad: Safari -> Share -> Add to Home Screen.
+
+New in v3:
+- Daily Amal kept simple
+- Basic Salah section
+- Adhan, Adhan response, after-Adhan dua
+- Fajr Adhan extra phrase
+- Witr Qunut (Tirmidhi 464, labelled Hasan)
+- Wudu/Qibla/prayer-time basics with Qur'an references
+- iOS standalone metadata + Apple touch icon
+- Offline service-worker cache
+
+Religious note: Bengali pronunciation is only a learning aid. Verify recitation with a qualified teacher.

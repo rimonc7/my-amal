@@ -1,150 +1,177 @@
 <!doctype html>
 <html lang="bn">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#123f32" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" href="icon-192.png" />
-  <title>আমার আমল</title>
-  <style>
-    :root{
-      --bg:#f6f8f6;--surface:#ffffff;--ink:#15241e;--muted:#68766f;--brand:#123f32;
-      --brand2:#1d5a47;--soft:#eaf3ef;--line:#e2e9e5;--warn:#fff7e7;--warnline:#ecd9a8;
-      --shadow:0 10px 28px rgba(24,56,44,.07)
-    }
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html{scroll-behavior:smooth}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali","Segoe UI",sans-serif;font-size:16px}
-    button{font:inherit}
-    .app{max-width:680px;margin:auto;padding:12px 14px 112px}
-    .hero{background:linear-gradient(145deg,var(--brand),var(--brand2));color:#fff;border-radius:26px;padding:22px 20px 20px;box-shadow:0 16px 40px rgba(18,63,50,.16)}
-    .eyebrow{font-size:13px;opacity:.8;margin-bottom:4px}.hero h1{font-size:30px;line-height:1.2;margin:0;font-weight:850;letter-spacing:-.4px}
-    .hero p{font-size:14px;line-height:1.6;margin:7px 0 0;opacity:.88}
-    .progressRow{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-top:19px}.bigCount{font-size:22px;font-weight:850}.streak{font-size:13px;background:#ffffff1f;border:1px solid #ffffff24;padding:7px 10px;border-radius:999px}
-    .progress{height:10px;background:#ffffff24;border-radius:999px;overflow:hidden;margin-top:10px}.bar{height:100%;width:0;background:#fff;border-radius:999px;transition:width .25s ease}
-    .topline{display:flex;align-items:center;justify-content:space-between;margin:20px 2px 10px}.topline h2{font-size:20px;margin:0}.date{font-size:13px;color:var(--brand);background:var(--soft);padding:7px 10px;border-radius:999px;font-weight:750}
-    .filters{display:flex;gap:8px;overflow:auto;padding:1px 0 8px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:9px 13px;font-weight:750;font-size:13px}.filter.active{background:var(--brand);color:#fff;border-color:var(--brand)}
-    .section{margin-top:8px}.sectionLabel{display:flex;align-items:center;gap:8px;margin:18px 3px 8px;font-size:14px;font-weight:850;color:#43564d}.sectionLabel span{font-size:17px}.sectionCount{margin-left:auto;font-weight:700;font-size:12px;color:var(--muted)}
-    .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;margin:9px 0;overflow:hidden;box-shadow:var(--shadow)}
-    .card.done{border-color:#cfe3da;background:#fbfefd}.cardMain{display:flex;align-items:flex-start;gap:12px;padding:16px}
-    .check{width:32px;height:32px;flex:0 0 32px;border:2px solid #a7b8b0;border-radius:11px;background:#fff;color:#fff;display:grid;place-items:center;font-size:18px;font-weight:900;margin-top:1px}.card.done .check{background:var(--brand);border-color:var(--brand)}
-    .meta{min-width:0;flex:1}.title{font-size:17px;font-weight:850;line-height:1.4}.when{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.45}.badge{display:inline-block;margin-top:7px;background:var(--soft);color:var(--brand);font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px}
-    .more{border:0;background:transparent;color:var(--brand);font-size:22px;line-height:1;padding:6px 2px 8px 8px;transform:rotate(0);transition:.2s}.card.open .more{transform:rotate(180deg)}
-    .details{display:none;border-top:1px solid var(--line);padding:2px 16px 18px}.card.open .details{display:block}
-    .arabic{direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri",serif;font-size:27px;line-height:2.05;margin:16px 0 4px;color:#102a21}
-    .block{margin-top:14px}.label{font-size:12px;letter-spacing:.1px;color:var(--brand);font-weight:850;margin-bottom:5px}.txt{font-size:15.5px;line-height:1.78;color:#263a31}.pron{background:#f8faf9;border-radius:14px;padding:11px 12px}.virtue{background:var(--soft);border-radius:14px;padding:11px 12px}.ref{font-size:13.5px;line-height:1.68;color:var(--muted)}.ref a{color:var(--brand);font-weight:800;text-decoration:none}.ref a:active{text-decoration:underline}
-    .note{margin:20px 2px 0;background:var(--warn);border:1px solid var(--warnline);border-radius:15px;padding:12px 13px;font-size:12.5px;line-height:1.65;color:#6b5a32}
-    .empty{display:none;text-align:center;color:var(--muted);padding:28px 12px;font-size:14px}
-    .bottom{position:fixed;left:0;right:0;bottom:0;padding:10px 14px max(10px,env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-top:1px solid var(--line);z-index:10}.bottomIn{max-width:680px;margin:auto;display:flex;gap:9px}.btn{min-height:46px;border:0;border-radius:14px;font-weight:850}.btn.secondary{width:42%;background:var(--soft);color:var(--brand)}.btn.primary{flex:1;background:var(--brand);color:#fff}
-    .done .title{text-decoration:none;color:#52645b}.done .badge{background:#edf7f2}
-    @media (max-width:380px){.hero h1{font-size:27px}.arabic{font-size:25px}.title{font-size:16px}.app{padding-left:11px;padding-right:11px}.cardMain{padding:14px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f3d2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="আমার আমল">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<title>আমার আমল</title>
+<style>
+:root{--bg:#f4f7f5;--card:#fff;--ink:#16221c;--muted:#68776f;--brand:#0f3d2e;--brand2:#17533f;--soft:#e7f2ed;--line:#dde7e1;--warn:#fff8e8}
+[data-theme="dark"]{--bg:#0f1512;--card:#17201b;--ink:#eef5f1;--muted:#a8b7af;--brand:#66c59d;--brand2:#255d48;--soft:#203229;--line:#2d3b34;--warn:#2b281e}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali","Segoe UI",sans-serif} button,input{font:inherit}
+.app{max-width:760px;margin:auto;padding:12px 12px 96px} .top{background:linear-gradient(135deg,#0f3d2e,#17533f);color:#fff;padding:20px;border-radius:22px;box-shadow:0 8px 24px #0002}
+h1{margin:0 0 5px;font-size:27px} .sub{font-size:13px;opacity:.9;line-height:1.55} .progress{margin-top:15px;height:10px;background:#ffffff24;border-radius:99px;overflow:hidden} .bar{height:100%;background:#fff;width:0;transition:.2s} .stats{display:flex;justify-content:space-between;margin-top:7px;font-size:12px}
+.smart{margin:12px 0;background:var(--soft);color:var(--ink);padding:11px 13px;border-radius:14px;font-size:13px;line-height:1.55}
+.nav{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:var(--bg);padding:9px 0 7px} .nav button{border:0;border-radius:12px;padding:9px 4px;background:var(--card);color:var(--muted);font-weight:800;font-size:12px;border:1px solid var(--line)} .nav button.active{background:var(--brand);color:#fff}
+.view{display:none} .view.active{display:block} .section-title{display:flex;justify-content:space-between;align-items:center;margin:17px 4px 9px} .section-title h2{font-size:18px;margin:0} .pill{font-size:11px;background:var(--soft);color:var(--brand);padding:5px 9px;border-radius:99px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;margin:9px 0;overflow:hidden} .head{display:flex;gap:10px;align-items:flex-start;padding:14px} .check{width:28px;height:28px;border:2px solid #95a79e;border-radius:9px;display:grid;place-items:center;background:transparent;color:#fff;flex:0 0 auto} .card.done .check{background:var(--brand);border-color:var(--brand)} .meta{flex:1} .title{font-weight:800;font-size:16px} .when{font-size:12px;color:var(--muted);margin-top:3px} .toggle{border:0;background:var(--soft);color:var(--brand);padding:8px 9px;border-radius:10px;font-weight:800;font-size:12px} .details{display:none;padding:0 14px 16px;border-top:1px solid var(--line)} .card.open .details{display:block}
+.arabic{direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri",serif;font-size:var(--ar,26px);line-height:1.95;margin:13px 0} .label{font-size:12px;font-weight:900;color:var(--brand);margin-top:12px} .txt{font-size:14px;line-height:1.72;margin-top:4px} .ref{font-size:12px;color:var(--muted);line-height:1.6} a{color:var(--brand)}
+.note{background:var(--warn);border:1px solid var(--line);border-radius:14px;padding:12px;font-size:13px;line-height:1.65;margin:10px 0}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:7px} .waqt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 5px;text-align:center} .waqt b{display:block;font-size:13px} .waqt span{font-size:11px;color:var(--muted)}
+.guide-step{padding:13px 14px;background:var(--card);border:1px solid var(--line);border-radius:15px;margin:8px 0} .guide-step b{color:var(--brand)} .guide-step p{margin:5px 0 0;font-size:13px;line-height:1.65}
+.search{width:100%;border:1px solid var(--line);border-radius:13px;background:var(--card);color:var(--ink);padding:11px 12px;margin:4px 0 8px}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:9px} .tool{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px} .tool h3{margin:0 0 8px;font-size:15px} .btn{border:0;background:var(--brand);color:#fff;border-radius:11px;padding:10px 12px;font-weight:800} .btn2{border:0;background:var(--soft);color:var(--brand);border-radius:11px;padding:10px 12px;font-weight:800}
+.counter{font-size:34px;font-weight:900;text-align:center;margin:10px 0} .counterBtns{display:flex;gap:7px} .counterBtns button{flex:1}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:8px} .day{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-size:11px;background:var(--soft);color:var(--muted)} .day.full{background:var(--brand);color:white} .day.partial{outline:2px solid var(--brand);color:var(--ink)} .day.empty{opacity:.45}
+.footer{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:9px} .footer .inner{max-width:760px;margin:auto;display:flex;gap:8px} .footer button{flex:1}
+.tiny{font-size:11px;color:var(--muted);line-height:1.6;margin:12px 2px} .hidden{display:none}
+@media(max-width:430px){.tools{grid-template-columns:1fr} .grid5{grid-template-columns:repeat(5,1fr)}}
+</style>
 </head>
 <body>
 <div class="app">
-  <header class="hero">
-    <div class="eyebrow">দৈনিক সহিহ আমল ট্র্যাকার</div>
-    <h1>আমার আমল</h1>
-    <p>অল্প কিছু গুরুত্বপূর্ণ আমল—নিয়মিত করার জন্য সহজভাবে সাজানো।</p>
-    <div class="progressRow"><div class="bigCount" id="count">০ / ০ সম্পন্ন</div><div class="streak" id="streak">🔥 ০ দিন</div></div>
-    <div class="progress" aria-label="আজকের অগ্রগতি"><div class="bar" id="bar"></div></div>
-  </header>
+<header class="top">
+<h1>আমার আমল</h1>
+<div class="sub">দৈনিক আমল অংশ সহজ রাখা হয়েছে। আলাদা অংশে সালাতের নিয়ম, প্রয়োজনীয় সূরা-দোয়া ও ব্যক্তিগত টুলস আছে।</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="stats"><span id="count"></span><span id="streak"></span></div>
+</header>
+<div class="smart" id="smart"></div>
+<nav class="nav">
+<button data-view="daily" class="active">আজকের আমল</button>
+<button data-view="salah">সালাত গাইড</button>
+<button data-view="basics">বেসিক</button>
+<button data-view="library">সূরা/দোয়া</button>
+<button data-view="tools">টুলস</button>
+</nav>
 
-  <div class="topline"><h2>আজকের আমল</h2><div class="date" id="dateLabel"></div></div>
-  <div class="filters" id="filters">
-    <button class="filter active" data-filter="all">সব</button>
-    <button class="filter" data-filter="morning">সকাল</button>
-    <button class="filter" data-filter="prayer">সালাতের পর</button>
-    <button class="filter" data-filter="evening">সন্ধ্যা</button>
-    <button class="filter" data-filter="night">রাত</button>
-    <button class="filter" data-filter="daily">দিনে</button>
-  </div>
+<section class="view active" id="daily">
+<div class="section-title"><h2>আজকের আমল</h2><span class="pill" id="dateLabel"></span></div>
+<main id="dailyList"></main>
+<p class="tiny">বাংলা উচ্চারণ সহায়ক মাত্র। সঠিক তিলাওয়াত/মাখরাজ নির্ভরযোগ্য শিক্ষকের কাছ থেকে শিখুন। কোনো কার্ডে “অন্য কার্ডে দেখুন” রাখা হয়নি; পুনরাবৃত্ত হলেও পূর্ণ লেখা দেওয়া হয়েছে।</p>
+</section>
 
-  <main id="list"></main>
-  <div class="empty" id="empty">এই বিভাগে কোনো আমল নেই।</div>
-  <div class="note"><b>নোট:</b> বাংলা উচ্চারণ কেবল সহায়ক। আরবি অক্ষরের সঠিক মাখরাজ বাংলা হরফে পুরোপুরি প্রকাশ করা যায় না। সম্ভব হলে আরবি দেখে শুদ্ধভাবে শিখুন।</div>
+<section class="view" id="salah">
+<div class="section-title"><h2>ওয়াক্তভিত্তিক সালাত</h2><span class="pill">ফরজ + সহিহ rawatib</span></div>
+<div class="grid5" id="waqtGrid"></div>
+<div class="note"><b>নিয়ত:</b> নিয়ত অন্তরের কাজ। নির্দিষ্ট আরবি “নিয়তের বাক্য” নবী ﷺ থেকে সহিহভাবে নির্ধারিত নেই, তাই app-এ বানানো কোনো নিয়ত বাক্য রাখা হয়নি।</div>
+<div class="section-title"><h2>একাকী / জামাতে</h2></div>
+<div class="guide-step"><b>একাকী:</b><p>কিবলামুখী হয়ে সালাত শুরু করুন, রুকু-সিজদা ও বৈঠকগুলো ধীরস্থিরভাবে আদায় করুন। নবী ﷺ বলেছেন, “তোমরা আমাকে যেভাবে সালাত আদায় করতে দেখ, সেভাবে সালাত আদায় কর।” <a href="https://sunnah.com/bukhari:631" target="_blank">সহিহ বুখারি 631 ↗</a></p></div>
+<div class="guide-step"><b>জামাতে:</b><p>ইমামকে অনুসরণ করবেন; ইমামের আগে রুকু/সিজদায় যাবেন না। ইমাম রুকু করলে রুকু, সিজদা করলে সিজদা। কাতার সোজা রাখুন। <a href="https://sunnah.com/bukhari:722" target="_blank">সহিহ বুখারি 722 ↗</a></p></div>
+<div class="note">ইমামের পেছনে কিরাআত, হাত বাঁধার স্থান, আঙুল নড়ানো ইত্যাদি কিছু বিষয়ে ফিকহি মতভেদ আছে। এই app মতভেদপূর্ণ বিষয়ে একটিকে “একমাত্র সহিহ পদ্ধতি” বলে চাপিয়ে দেয় না।</div>
+<div class="section-title"><h2>রাকাতের মূল ধাপ</h2></div>
+<div id="steps"></div>
+</section>
+
+<section class="view" id="basics">
+<div class="section-title"><h2>নামাজের জরুরি বেসিক</h2><span class="pill">দলিলসহ</span></div>
+<div class="note"><b>গুরুত্বপূর্ণ:</b> এই অংশ শেখার সহায়ক। বাংলা উচ্চারণ আরবির বিকল্প নয়। ফিকহি মতভেদের জায়গায় একটিকে জোর করে “একমাত্র সঠিক” বলা হয়নি।</div>
+<div id="basicList"></div>
+</section>
+
+<section class="view" id="library">
+<input id="search" class="search" placeholder="সূরা বা দোয়া খুঁজুন...">
+<div class="section-title"><h2>নামাজে প্রয়োজনীয় সূরা</h2><span class="pill">আরবি + উচ্চারণ + অর্থ</span></div>
+<div id="surahList"></div>
+<div class="section-title"><h2>নামাজের দোয়া ও যিকর</h2><span class="pill">দলিলসহ</span></div>
+<div id="duaList"></div>
+<div class="note">ফাতিহার পর কুরআনের যে কোনো অংশ পড়া যায়; তাই পুরো ১১৪ সূরা app-এ কপি না করে নামাজে বেশি ব্যবহৃত ছোট সূরাগুলো রাখা হয়েছে। প্রত্যেক সূরার মূল কুরআন উৎসের link দেওয়া আছে।</div>
+</section>
+
+<section class="view" id="tools">
+<div class="section-title"><h2>সহায়ক টুলস</h2><span class="pill">দৈনিক তালিকা অপরিবর্তিত</span></div>
+<div class="tools">
+<div class="tool"><h3>📿 তাসবিহ কাউন্টার</h3><div class="counter" id="tasCount">০</div><div class="counterBtns"><button class="btn" id="plus">+1</button><button class="btn2" id="tasReset">Reset</button></div></div>
+<div class="tool"><h3>🌙 থিম</h3><button class="btn2" id="themeBtn">Light / Dark</button><h3 style="margin-top:14px">🔠 আরবি লেখার সাইজ</h3><input type="range" min="23" max="36" value="26" id="fontRange" style="width:100%"></div>
+<div class="tool"><h3>📊 ৩০ দিনের হিস্ট্রি</h3><div id="historySummary" class="txt"></div><div class="calendar" id="calendar"></div></div>
+<div class="tool"><h3>💾 Backup / Restore</h3><p class="txt">ফোন বদলালে progress/history রাখতে JSON backup নিন।</p><div style="display:flex;gap:7px;flex-wrap:wrap"><button class="btn" id="backup">Backup</button><button class="btn2" id="restoreBtn">Restore</button></div><input class="hidden" type="file" accept=".json,application/json" id="restoreFile"></div>
 </div>
-
-<div class="bottom"><div class="bottomIn">
-  <button class="btn secondary" id="resetBtn">আজ Reset</button>
-  <button class="btn primary" id="installBtn">Install App</button>
-</div></div>
+<div class="note"><b>Reminder:</b> backend ছাড়া browser বন্ধ অবস্থায় নির্ভরযোগ্য scheduled push notification সব ফোনে কাজ করে না। ভুল ভরসা এড়াতে app-এ unreliable notification যোগ করা হয়নি; app খুললে সময় অনুযায়ী উপরের suggestion banner বদলায়।</div>
+</section>
+</div>
+<div class="footer"><div class="inner"><button class="btn2" id="resetBtn">আজ Reset</button><button class="btn" id="installBtn">Install App</button></div></div>
 
 <script>
-const A=[
-{id:'salah',group:'daily',icon:'🕌',title:'৫ ওয়াক্ত ফরজ সালাত',when:'প্রতিদিন • সময়মতো',tag:'সর্বোচ্চ অগ্রাধিকার',arabic:'',pron:'',meaning:'পাঁচ ওয়াক্ত ফরজ সালাত সময়মতো আদায় করুন।',virtue:'পাঁচ ওয়াক্ত সালাতের মাধ্যমে আল্লাহ গুনাহ মুছে দেন—হাদিসে একে দরজার সামনে প্রবাহিত নদীতে প্রতিদিন পাঁচবার গোসল করার সাথে তুলনা করা হয়েছে।',ref:'সহিহ আল-বুখারি 528.',url:'https://sunnah.com/bukhari:528'},
-{id:'kursi_prayer',group:'prayer',icon:'🕋',title:'ফরজ সালাতের পর আয়াতুল কুরসি',when:'প্রতি ফরজ সালাতের পর • ১ বার',tag:'আয়াতুল কুরসি',arabic:'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ',pron:'আল্লাহু লা ইলাহা ইল্লা হুয়াল হাইয়্যুল কাইয়্যূম। লা তা’খুযুহু সিনাতুঁ ওয়ালা নাউম। লাহু মা ফিস্-সামাওয়াতি ওয়া মা ফিল আরদ। মান যাল্লাযী ইয়াশফাউ ইন্দাহু ইল্লা বি-ইযনিহ। ইয়া’লামু মা বাইনা আইদীহিম ওয়া মা খালফাহুম। ওয়ালা ইউহীতূনা বিশাইইম মিন ইলমিহী ইল্লা বিমা শা-আ। ওয়াসিআ কুরসিয়্যুহুস সামাওয়াতি ওয়াল আরদ। ওয়ালা ইয়াউদুহু হিফযুহুমা। ওয়া হুয়াল আলিয়্যুল আযীম।',meaning:'আল্লাহ—তিনি ছাড়া কোনো সত্য উপাস্য নেই। তিনি চিরঞ্জীব, সবকিছুর ধারক... তাঁর কুরসি আসমান ও জমিনব্যাপী; তিনি সর্বোচ্চ, মহান।',virtue:'প্রতি ফরজ সালাতের পর আয়াতুল কুরসি পাঠের জন্য জান্নাতে প্রবেশের বিশেষ ফজিলত বর্ণিত হয়েছে।',ref:'Bulugh al-Maram 220; বর্ণনাটি আন-নাসাঈতে এসেছে এবং সহিহ হিসেবে উল্লেখ করা হয়েছে.',url:'https://sunnah.com/bulugh/2/220'},
-{id:'posttasbih',group:'prayer',icon:'📿',title:'ফরজের পর ৩৩–৩৩–৩৩ + তাহলিল',when:'প্রতি ফরজ সালাতের পর',tag:'তাসবিহ',arabic:'سُبْحَانَ اللَّهِ ×٣٣  •  الْحَمْدُ لِلَّهِ ×٣٣  •  اللَّهُ أَكْبَرُ ×٣٣',pron:'সুবহানাল্লাহ ৩৩ বার, আলহামদুলিল্লাহ ৩৩ বার, আল্লাহু আকবার ৩৩ বার; এরপর “লা ইলাহা ইল্লাল্লাহু ওয়াহদাহু লা শারীকা লাহু...” বলে ১০০ পূর্ণ করুন।',meaning:'আল্লাহর পবিত্রতা, প্রশংসা ও মহত্ত্ব ঘোষণা করা।',virtue:'এভাবে ফরজ সালাতের পর যিকর করলে গুনাহ সমুদ্রের ফেনার মতো হলেও ক্ষমার কথা এসেছে।',ref:'সহিহ মুসলিম 597a.',url:'https://sunnah.com/muslim:597a'},
-{id:'3qul_am',group:'morning',icon:'🌅',title:'সকাল: ইখলাস, ফালাক, নাস',when:'সকাল • প্রতিটি ৩ বার',tag:'সুরক্ষা',arabic:'قُلْ هُوَ اللَّهُ أَحَدٌ …  •  قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ …  •  قُلْ أَعُوذُ بِرَبِّ النَّاسِ …',pron:'কুল হুয়াল্লাহু আহাদ… / কুল আউযু বিরাব্বিল ফালাক… / কুল আউযু বিরাব্বিন্নাস…',meaning:'সূরা ইখলাস, সূরা ফালাক ও সূরা নাস—প্রতিটি তিনবার পড়ুন।',virtue:'সকাল ও সন্ধ্যায় তিনবার পড়লে “সবকিছুর জন্য যথেষ্ট হবে” বলে হাদিসে এসেছে।',ref:'সুনান আবু দাউদ 5082 — হাসান.',url:'https://sunnah.com/abudawud:5082'},
-{id:'sayyid_am',group:'morning',icon:'🤲',title:'সাইয়্যিদুল ইস্তিগফার — সকাল',when:'সকাল • ১ বার',tag:'ইস্তিগফার',arabic:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ',pron:'আল্লাহুম্মা আনতা রব্বী, লা ইলাহা ইল্লা আনতা। খালাকতানী ওয়া আনা আবদুকা। ওয়া আনা আলা আহদিকা ওয়া ওয়াদিকা মাসতাতা’তু। আউযু বিকা মিন শাররি মা সানা’তু। আবূউ লাকা বিনি’মাতিকা আলাইয়্যা, ওয়া আবূউ লাকা বিযাম্বী। ফাগফির লী; ফা-ইন্নাহু লা ইয়াগফিরুয যুনূবা ইল্লা আনতা।',meaning:'হে আল্লাহ, আপনি আমার রব; আপনি ছাড়া কোনো সত্য উপাস্য নেই... আমার গুনাহ ক্ষমা করুন; আপনি ছাড়া কেউ গুনাহ ক্ষমা করতে পারে না।',virtue:'দিনে দৃঢ় বিশ্বাসসহ পড়ে সন্ধ্যার আগে মারা গেলে জান্নাতবাসী হওয়ার সুসংবাদ এসেছে।',ref:'সহিহ আল-বুখারি 6306.',url:'https://sunnah.com/bukhari:6306'},
-{id:'3qul_pm',group:'evening',icon:'🌇',title:'সন্ধ্যা: ইখলাস, ফালাক, নাস',when:'সন্ধ্যা • প্রতিটি ৩ বার',tag:'সুরক্ষা',arabic:'قُلْ هُوَ اللَّهُ أَحَدٌ …  •  قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ …  •  قُلْ أَعُوذُ بِرَبِّ النَّاسِ …',pron:'কুল হুয়াল্লাহু আহাদ… / কুল আউযু বিরাব্বিল ফালাক… / কুল আউযু বিরাব্বিন্নাস…',meaning:'সূরা ইখলাস, সূরা ফালাক ও সূরা নাস—প্রতিটি তিনবার পড়ুন।',virtue:'সকাল ও সন্ধ্যায় তিনবার পড়লে “সবকিছুর জন্য যথেষ্ট হবে” বলে হাদিসে এসেছে।',ref:'সুনান আবু দাউদ 5082 — হাসান.',url:'https://sunnah.com/abudawud:5082'},
-{id:'sayyid_pm',group:'evening',icon:'🤲',title:'সাইয়্যিদুল ইস্তিগফার — সন্ধ্যা',when:'সন্ধ্যা • ১ বার',tag:'ইস্তিগফার',arabic:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ',pron:'আল্লাহুম্মা আনতা রব্বী, লা ইলাহা ইল্লা আনতা… ফাগফির লী; ফা-ইন্নাহু লা ইয়াগফিরুয যুনূবা ইল্লা আনতা।',meaning:'হে আল্লাহ, আপনি আমার রব... আমার গুনাহ ক্ষমা করুন; আপনি ছাড়া কেউ গুনাহ ক্ষমা করতে পারে না।',virtue:'রাতে দৃঢ় বিশ্বাসসহ পড়ে সকাল হওয়ার আগে মারা গেলে জান্নাতবাসী হওয়ার সুসংবাদ এসেছে।',ref:'সহিহ আল-বুখারি 6306.',url:'https://sunnah.com/bukhari:6306'},
-{id:'sub100',group:'daily',icon:'✨',title:'সুবহানাল্লাহি ওয়া বিহামদিহি',when:'দিনে • ১০০ বার',tag:'সহজ যিকর',arabic:'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ',pron:'সুবহানাল্লাহি ওয়া বিহামদিহি।',meaning:'আল্লাহ পবিত্র; তাঁরই প্রশংসা।',virtue:'দিনে ১০০ বার বললে গুনাহ সমুদ্রের ফেনার মতো হলেও মুছে দেওয়ার কথা এসেছে।',ref:'সহিহ মুসলিম 2691.',url:'https://sunnah.com/muslim:2691'},
-{id:'tahlil100',group:'daily',icon:'☀️',title:'তাহলিল ১০০ বার',when:'দিনে • ১০০ বার',tag:'বড় ফজিলত',arabic:'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',pron:'লা ইলাহা ইল্লাল্লাহু ওয়াহদাহু লা শারীকা লাহু, লাহুল মুলকু ওয়া লাহুল হামদু, ওয়া হুয়া আলা কুল্লি শাইইন কাদীর।',meaning:'আল্লাহ ছাড়া কোনো সত্য উপাস্য নেই; তিনি এক, তাঁর কোনো শরিক নেই; রাজত্ব ও প্রশংসা তাঁরই; তিনি সবকিছুর উপর ক্ষমতাবান।',virtue:'১০ দাস মুক্তির সমান সওয়াব, ১০০ নেকি, ১০০ গুনাহ মোচন এবং দিনভর শয়তান থেকে সুরক্ষার কথা এসেছে।',ref:'সহিহ মুসলিম 2691; সহিহ আল-বুখারি 3293.',url:'https://sunnah.com/muslim:2691'},
-{id:'kursi_sleep',group:'night',icon:'🌙',title:'ঘুমের আগে আয়াতুল কুরসি',when:'ঘুমানোর আগে • ১ বার',tag:'রাতের সুরক্ষা',arabic:'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ …',pron:'আয়াতুল কুরসি—সূরা আল-বাকারা ২:২৫৫। পূর্ণ উচ্চারণ উপরের “ফরজ সালাতের পর আয়াতুল কুরসি” কার্ডে আছে।',meaning:'ঘুমানোর আগে সম্পূর্ণ আয়াতুল কুরসি পড়ুন।',virtue:'ঘুমের আগে পড়লে আল্লাহর পক্ষ থেকে একজন রক্ষক থাকে এবং সকাল পর্যন্ত শয়তান কাছে আসে না।',ref:'সহিহ আল-বুখারি 2311.',url:'https://sunnah.com/bukhari:2311'}
+const DAILY=[{"id": "salah", "title": "৫ ওয়াক্ত ফরজ সালাত", "when": "প্রতিদিন • সময়মতো", "arabic": "", "pron": "", "meaning": "পাঁচ ওয়াক্ত ফরজ সালাত আদায় করুন।", "virtue": "পাঁচ ওয়াক্ত সালাত গুনাহ মোচনের বড় মাধ্যম হিসেবে সহিহ হাদিসে এসেছে।", "ref": "সহিহ আল-বুখারি 528", "url": "https://sunnah.com/bukhari:528"}, {"id": "kursi_prayer", "title": "ফরজ সালাতের পর আয়াতুল কুরসি", "when": "প্রতি ফরজ সালাতের পর • ১ বার", "arabic": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ", "pron": "আল্লাহু লা ইলাহা ইল্লা হুয়াল হাইয়্যুল কাইয়্যূম। লা তা’খুযুহু সিনাতুঁ ওয়ালা নাওম। লাহু মা ফিস্ সামাওয়াতি ওয়া মা ফিল আরদ। মান যাল্লাযী ইয়াশফা‘উ ‘ইনদাহু ইল্লা বিইযনিহ। ইয়া‘লামু মা বাইনা আইদীহিম ওয়া মা খালফাহুম। ওয়ালা ইউহীতূনা বিশাইইম মিন ‘ইলমিহী ইল্লা বিমা শা’। ওয়াসি‘আ কুরসিয়্যুহুস সামাওয়াতি ওয়াল আরদ। ওয়ালা ইয়াউদুহু হিফযুহুমা। ওয়া হুয়াল ‘আলিয়্যুল ‘আযীম।", "meaning": "আল্লাহ—তিনি ছাড়া কোনো সত্য উপাস্য নেই; তিনি চিরঞ্জীব, সমগ্র সৃষ্টির ধারক। তাঁকে তন্দ্রা বা নিদ্রা স্পর্শ করে না। আসমানসমূহ ও জমিনে যা কিছু আছে সব তাঁর। তাঁর অনুমতি ছাড়া কে তাঁর কাছে সুপারিশ করতে পারে? তিনি জানেন তাদের সামনে ও পেছনে যা কিছু আছে। তিনি যা চান তা ছাড়া তাঁর জ্ঞানের কিছুই তারা আয়ত্ত করতে পারে না। তাঁর কুরসি আসমানসমূহ ও জমিনকে পরিব্যাপ্ত করেছে; এগুলোর রক্ষণাবেক্ষণ তাঁকে ক্লান্ত করে না। তিনি সর্বোচ্চ, মহান।", "virtue": "প্রতি ফরজ সালাতের পর পড়লে জান্নাতে প্রবেশে মৃত্যু ছাড়া আর বাধা থাকবে না—এ মর্মে সহিহ হিসেবে গৃহীত বর্ণনা এসেছে।", "ref": "আন-নাসাঈ; ইবন হিব্বান — Bulugh al-Maram 220", "url": "https://sunnah.com/bulugh/2/220"}, {"id": "posttasbih", "title": "ফরজের পর ৩৩-৩৩-৩৩ + তাহলিল", "when": "প্রতি ফরজ সালাতের পর", "arabic": "سُبْحَانَ اللَّهِ ×٣٣  •  الْحَمْدُ لِلَّهِ ×٣٣  •  اللَّهُ أَكْبَرُ ×٣٣<br><br>لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", "pron": "সুবহানাল্লাহ ৩৩ বার, আলহামদুলিল্লাহ ৩৩ বার, আল্লাহু আকবার ৩৩ বার; এরপর একবার: লা ইলাহা ইল্লাল্লাহু ওয়াহদাহু লা শারীকা লাহু, লাহুল মুলকু ওয়া লাহুল হামদু, ওয়া হুয়া ‘আলা কুল্লি শাইইন কাদীর।", "meaning": "আল্লাহর পবিত্রতা, প্রশংসা ও মহত্ত্ব ঘোষণা; শেষে তাঁর একত্ব ঘোষণা।", "virtue": "এভাবে ১০০ পূর্ণ করলে গুনাহ সমুদ্রের ফেনার মতো হলেও ক্ষমার কথা এসেছে।", "ref": "সহিহ মুসলিম 597a", "url": "https://sunnah.com/muslim:597a"}, {"id": "3qul_am", "title": "সকাল: ইখলাস, ফালাক, নাস", "when": "সকাল • প্রতিটি ৩ বার", "arabic": "<b>সূরা আল-ইখলাস</b><br>قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ<br><br><b>সূরা আল-ফালাক</b><br>قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِنْ شَرِّ مَا خَلَقَ ۝ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ<br><br><b>সূরা আন-নাস</b><br>قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ", "pron": "ইখলাস: কুল হুয়াল্লাহু আহাদ। আল্লাহুস সামাদ। লাম ইয়ালিদ ওয়ালাম ইউলাদ। ওয়ালাম ইয়াকুল্লাহু কুফুওয়ান আহাদ।<br><br>ফালাক: কুল আ‘উযু বিরাব্বিল ফালাক। মিন শাররি মা খালাক। ওয়া মিন শাররি গাসিকিন ইযা ওয়াকাব। ওয়া মিন শাররিন নাফ্ফাছাতি ফিল ‘উকাদ। ওয়া মিন শাররি হাসিদিন ইযা হাসাদ।<br><br>নাস: কুল আ‘উযু বিরাব্বিন নাস। মালিকিন নাস। ইলাহিন নাস। মিন শাররিল ওয়াসওয়াসিল খান্নাস। আল্লাযী ইউওয়াসউইসু ফী সুদূরিন নাস। মিনাল জিন্নাতি ওয়ান নাস।", "meaning": "ইখলাস: বলুন, তিনি আল্লাহ, এক; আল্লাহ অমুখাপেক্ষী; তিনি জন্ম দেননি এবং জন্মগ্রহণও করেননি; তাঁর সমতুল্য কেউ নেই।<br><br>ফালাক: বলুন, আমি আশ্রয় চাই প্রভাতের রবের কাছে—তিনি যা সৃষ্টি করেছেন তার অনিষ্ট থেকে, অন্ধকার রাতের অনিষ্ট থেকে, গিরায় ফুঁ-দেওয়াদের অনিষ্ট থেকে এবং হিংসুকের অনিষ্ট থেকে যখন সে হিংসা করে।<br><br>নাস: বলুন, আমি আশ্রয় চাই মানুষের রব, মানুষের অধিপতি, মানুষের উপাস্যের কাছে—কুমন্ত্রণাদাতা, আত্মগোপনকারী শয়তানের অনিষ্ট থেকে, যে মানুষের অন্তরে কুমন্ত্রণা দেয়—জিন ও মানুষের মধ্য থেকে।", "virtue": "সকাল ও সন্ধ্যায় প্রতিটি তিনবার পড়লে “সবকিছুর জন্য যথেষ্ট হবে” বলে হাদিসে এসেছে।", "ref": "সুনান আবু দাউদ 5082 — সহিহ/হাসান হিসেবে গৃহীত", "url": "https://sunnah.com/abudawud:5082"}, {"id": "sayyid_am", "title": "সাইয়্যিদুল ইস্তিগফার — সকাল", "when": "সকাল • ১ বার", "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ", "pron": "আল্লাহুম্মা আনতা রব্বী, লা ইলাহা ইল্লা আনতা, খালাকতানী ওয়া আনা ‘আবদুকা, ওয়া আনা ‘আলা ‘আহদিকা ওয়া ওয়া‘দিকা মাসতাতা‘তু, আ‘উযু বিকা মিন শাররি মা সানা‘তু, আবূউ লাকা বিনি‘মাতিকা ‘আলাইয়া, ওয়া আবূউ লাকা বিযাম্বী, ফাগফির লী, ফা ইন্নাহু লা ইয়াগফিরুয যুনূবা ইল্লা আনতা।", "meaning": "হে আল্লাহ, আপনি আমার রব; আপনি ছাড়া কোনো সত্য উপাস্য নেই। আপনি আমাকে সৃষ্টি করেছেন, আমি আপনার বান্দা। সাধ্য অনুযায়ী আপনার অঙ্গীকার ও প্রতিশ্রুতিতে আছি। আমি আমার কৃতকর্মের অনিষ্ট থেকে আপনার আশ্রয় চাই। আপনার অনুগ্রহ স্বীকার করছি এবং নিজের গুনাহও স্বীকার করছি। তাই আমাকে ক্ষমা করুন; আপনি ছাড়া গুনাহ ক্ষমা করার কেউ নেই।", "virtue": "দিনে দৃঢ় বিশ্বাসসহ পড়ে সন্ধ্যার আগে মারা গেলে জান্নাতবাসী হওয়ার সুসংবাদ এসেছে।", "ref": "সহিহ আল-বুখারি 6306", "url": "https://sunnah.com/bukhari:6306"}, {"id": "3qul_pm", "title": "সন্ধ্যা: ইখলাস, ফালাক, নাস", "when": "সন্ধ্যা • প্রতিটি ৩ বার", "arabic": "<b>সূরা আল-ইখলাস</b><br>قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ<br><br><b>সূরা আল-ফালাক</b><br>قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِنْ شَرِّ مَا خَلَقَ ۝ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ<br><br><b>সূরা আন-নাস</b><br>قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ", "pron": "ইখলাস: কুল হুয়াল্লাহু আহাদ। আল্লাহুস সামাদ। লাম ইয়ালিদ ওয়ালাম ইউলাদ। ওয়ালাম ইয়াকুল্লাহু কুফুওয়ান আহাদ।<br><br>ফালাক: কুল আ‘উযু বিরাব্বিল ফালাক। মিন শাররি মা খালাক। ওয়া মিন শাররি গাসিকিন ইযা ওয়াকাব। ওয়া মিন শাররিন নাফ্ফাছাতি ফিল ‘উকাদ। ওয়া মিন শাররি হাসিদিন ইযা হাসাদ।<br><br>নাস: কুল আ‘উযু বিরাব্বিন নাস। মালিকিন নাস। ইলাহিন নাস। মিন শাররিল ওয়াসওয়াসিল খান্নাস। আল্লাযী ইউওয়াসউইসু ফী সুদূরিন নাস। মিনাল জিন্নাতি ওয়ান নাস।", "meaning": "ইখলাস: বলুন, তিনি আল্লাহ, এক; আল্লাহ অমুখাপেক্ষী; তিনি জন্ম দেননি এবং জন্মগ্রহণও করেননি; তাঁর সমতুল্য কেউ নেই।<br><br>ফালাক: বলুন, আমি আশ্রয় চাই প্রভাতের রবের কাছে—তিনি যা সৃষ্টি করেছেন তার অনিষ্ট থেকে, অন্ধকার রাতের অনিষ্ট থেকে, গিরায় ফুঁ-দেওয়াদের অনিষ্ট থেকে এবং হিংসুকের অনিষ্ট থেকে যখন সে হিংসা করে।<br><br>নাস: বলুন, আমি আশ্রয় চাই মানুষের রব, মানুষের অধিপতি, মানুষের উপাস্যের কাছে—কুমন্ত্রণাদাতা, আত্মগোপনকারী শয়তানের অনিষ্ট থেকে, যে মানুষের অন্তরে কুমন্ত্রণা দেয়—জিন ও মানুষের মধ্য থেকে।", "virtue": "সকাল ও সন্ধ্যায় প্রতিটি তিনবার পড়লে “সবকিছুর জন্য যথেষ্ট হবে” বলে হাদিসে এসেছে।", "ref": "সুনান আবু দাউদ 5082 — সহিহ/হাসান হিসেবে গৃহীত", "url": "https://sunnah.com/abudawud:5082"}, {"id": "sayyid_pm", "title": "সাইয়্যিদুল ইস্তিগফার — সন্ধ্যা", "when": "সন্ধ্যা • ১ বার", "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ", "pron": "আল্লাহুম্মা আনতা রব্বী, লা ইলাহা ইল্লা আনতা, খালাকতানী ওয়া আনা ‘আবদুকা, ওয়া আনা ‘আলা ‘আহদিকা ওয়া ওয়া‘দিকা মাসতাতা‘তু, আ‘উযু বিকা মিন শাররি মা সানা‘তু, আবূউ লাকা বিনি‘মাতিকা ‘আলাইয়া, ওয়া আবূউ লাকা বিযাম্বী, ফাগফির লী, ফা ইন্নাহু লা ইয়াগফিরুয যুনূবা ইল্লা আনতা।", "meaning": "হে আল্লাহ, আপনি আমার রব; আপনি ছাড়া কোনো সত্য উপাস্য নেই। আপনি আমাকে সৃষ্টি করেছেন, আমি আপনার বান্দা। সাধ্য অনুযায়ী আপনার অঙ্গীকার ও প্রতিশ্রুতিতে আছি। আমি আমার কৃতকর্মের অনিষ্ট থেকে আপনার আশ্রয় চাই। আপনার অনুগ্রহ স্বীকার করছি এবং নিজের গুনাহও স্বীকার করছি। তাই আমাকে ক্ষমা করুন; আপনি ছাড়া গুনাহ ক্ষমা করার কেউ নেই।", "virtue": "রাতে দৃঢ় বিশ্বাসসহ পড়ে সকাল হওয়ার আগে মারা গেলে জান্নাতবাসী হওয়ার সুসংবাদ এসেছে।", "ref": "সহিহ আল-বুখারি 6306", "url": "https://sunnah.com/bukhari:6306"}, {"id": "sub100", "title": "সুবহানাল্লাহি ওয়া বিহামদিহি", "when": "দিনে • ১০০ বার", "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", "pron": "সুবহানাল্লাহি ওয়া বিহামদিহি", "meaning": "আল্লাহ পবিত্র; তাঁরই প্রশংসা।", "virtue": "দিনে ১০০ বার বললে গুনাহ সমুদ্রের ফেনার মতো হলেও মুছে দেওয়ার কথা এসেছে।", "ref": "সহিহ মুসলিম 2691", "url": "https://sunnah.com/muslim:2691"}, {"id": "tahlil100", "title": "তাহলিল ১০০ বার", "when": "দিনে • ১০০ বার", "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", "pron": "লা ইলাহা ইল্লাল্লাহু ওয়াহদাহু লা শারীকা লাহু, লাহুল মুলকু ওয়া লাহুল হামদু, ওয়া হুয়া ‘আলা কুল্লি শাইইন কাদীর।", "meaning": "আল্লাহ ছাড়া কোনো সত্য উপাস্য নেই; তিনি এক, তাঁর কোনো শরিক নেই; রাজত্ব ও প্রশংসা তাঁরই; তিনি সবকিছুর উপর ক্ষমতাবান।", "virtue": "১০ দাস মুক্তির সমান সওয়াব, ১০০ নেকি, ১০০ গুনাহ মোচন এবং দিনভর শয়তান থেকে সুরক্ষার কথা এসেছে।", "ref": "সহিহ আল-বুখারি 3293; সহিহ মুসলিম 2691", "url": "https://sunnah.com/muslim:2691"}, {"id": "kursi_sleep", "title": "ঘুমের আগে আয়াতুল কুরসি", "when": "রাতে • ১ বার", "arabic": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ", "pron": "আল্লাহু লা ইলাহা ইল্লা হুয়াল হাইয়্যুল কাইয়্যূম। লা তা’খুযুহু সিনাতুঁ ওয়ালা নাওম। লাহু মা ফিস্ সামাওয়াতি ওয়া মা ফিল আরদ। মান যাল্লাযী ইয়াশফা‘উ ‘ইনদাহু ইল্লা বিইযনিহ। ইয়া‘লামু মা বাইনা আইদীহিম ওয়া মা খালফাহুম। ওয়ালা ইউহীতূনা বিশাইইম মিন ‘ইলমিহী ইল্লা বিমা শা’। ওয়াসি‘আ কুরসিয়্যুহুস সামাওয়াতি ওয়াল আরদ। ওয়ালা ইয়াউদুহু হিফযুহুমা। ওয়া হুয়াল ‘আলিয়্যুল ‘আযীম।", "meaning": "আল্লাহ—তিনি ছাড়া কোনো সত্য উপাস্য নেই; তিনি চিরঞ্জীব, সমগ্র সৃষ্টির ধারক। তাঁকে তন্দ্রা বা নিদ্রা স্পর্শ করে না। আসমানসমূহ ও জমিনে যা কিছু আছে সব তাঁর। তাঁর অনুমতি ছাড়া কে তাঁর কাছে সুপারিশ করতে পারে? তিনি জানেন তাদের সামনে ও পেছনে যা কিছু আছে। তিনি যা চান তা ছাড়া তাঁর জ্ঞানের কিছুই তারা আয়ত্ত করতে পারে না। তাঁর কুরসি আসমানসমূহ ও জমিনকে পরিব্যাপ্ত করেছে; এগুলোর রক্ষণাবেক্ষণ তাঁকে ক্লান্ত করে না। তিনি সর্বোচ্চ, মহান।", "virtue": "ঘুমের আগে পড়লে আল্লাহর পক্ষ থেকে রক্ষক থাকে এবং সকাল পর্যন্ত শয়তান কাছে আসে না।", "ref": "সহিহ আল-বুখারি 2311", "url": "https://sunnah.com/bukhari:2311"}];
+const SURAHS=[{"title": "সূরা আল-ফাতিহা", "ref": "কুরআন 1:1–7", "url": "https://quran.com/1", "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمَٰنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ۝ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", "pron": "বিসমিল্লাহির রাহমানির রাহীম। আলহামদু লিল্লাহি রব্বিল ‘আলামীন। আর-রাহমানির রাহীম। মালিকি ইয়াওমিদ্দীন। ইয়্যাকা না‘বুদু ওয়া ইয়্যাকা নাসতা‘ঈন। ইহদিনাস সিরাতাল মুস্তাকীম। সিরাতাল্লাযীনা আন‘আমতা ‘আলাইহিম, গাইরিল মাগদূবি ‘আলাইহিম ওয়ালাদ্দল্লীন।", "meaning": "পরম করুণাময়, অতি দয়ালু আল্লাহর নামে। সব প্রশংসা আল্লাহর, যিনি সকল জগতের রব; পরম করুণাময়, অতি দয়ালু; বিচার দিনের মালিক। আমরা শুধু আপনারই ইবাদত করি এবং শুধু আপনারই সাহায্য চাই। আমাদের সরল পথ দেখান—তাদের পথ যাদের আপনি অনুগ্রহ করেছেন; তাদের নয় যাদের উপর গজব নেমেছে এবং যারা পথভ্রষ্ট।"}, {"title": "সূরা আল-ইখলাস", "ref": "কুরআন 112", "url": "https://quran.com/112", "arabic": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ", "pron": "কুল হুয়াল্লাহু আহাদ। আল্লাহুস সামাদ। লাম ইয়ালিদ ওয়ালাম ইউলাদ। ওয়ালাম ইয়াকুল্লাহু কুফুওয়ান আহাদ।", "meaning": "বলুন, তিনি আল্লাহ, এক; আল্লাহ অমুখাপেক্ষী; তিনি জন্ম দেননি এবং জন্মগ্রহণও করেননি; তাঁর সমতুল্য কেউ নেই।"}, {"title": "সূরা আল-ফালাক", "ref": "কুরআন 113", "url": "https://quran.com/113", "arabic": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِنْ شَرِّ مَا خَلَقَ ۝ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ", "pron": "কুল আ‘উযু বিরাব্বিল ফালাক। মিন শাররি মা খালাক। ওয়া মিন শাররি গাসিকিন ইযা ওয়াকাব। ওয়া মিন শাররিন নাফ্ফাছাতি ফিল ‘উকাদ। ওয়া মিন শাররি হাসিদিন ইযা হাসাদ।", "meaning": "বলুন, আমি আশ্রয় চাই প্রভাতের রবের কাছে—তিনি যা সৃষ্টি করেছেন তার অনিষ্ট থেকে, অন্ধকার রাতের অনিষ্ট থেকে, গিরায় ফুঁ-দেওয়াদের অনিষ্ট থেকে এবং হিংসুকের অনিষ্ট থেকে যখন সে হিংসা করে।"}, {"title": "সূরা আন-নাস", "ref": "কুরআন 114", "url": "https://quran.com/114", "arabic": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ", "pron": "কুল আ‘উযু বিরাব্বিন নাস। মালিকিন নাস। ইলাহিন নাস। মিন শাররিল ওয়াসওয়াসিল খান্নাস। আল্লাযী ইউওয়াসউইসু ফী সুদূরিন নাস। মিনাল জিন্নাতি ওয়ান নাস।", "meaning": "বলুন, আমি আশ্রয় চাই মানুষের রব, মানুষের অধিপতি, মানুষের উপাস্যের কাছে—কুমন্ত্রণাদাতা, আত্মগোপনকারী শয়তানের অনিষ্ট থেকে, যে মানুষের অন্তরে কুমন্ত্রণা দেয়—জিন ও মানুষের মধ্য থেকে।"}, {"title": "সূরা আল-কাওসার", "ref": "কুরআন 108", "url": "https://quran.com/108", "arabic": "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ ۝ فَصَلِّ لِرَبِّكَ وَانْحَرْ ۝ إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ", "pron": "ইন্না আ‘তাইনাকাল কাওসার। ফাসাল্লি লিরাব্বিকা ওয়ানহার। ইন্না শানিআকা হুয়াল আবতার।", "meaning": "নিশ্চয়ই আমি আপনাকে কাওসার দান করেছি। তাই আপনার রবের জন্য সালাত আদায় করুন ও কুরবানি করুন। নিশ্চয়ই আপনার বিদ্বেষীই নির্বংশ।"}, {"title": "সূরা আল-কাফিরুন", "ref": "কুরআন 109", "url": "https://quran.com/109", "arabic": "قُلْ يَا أَيُّهَا الْكَافِرُونَ ۝ لَا أَعْبُدُ مَا تَعْبُدُونَ ۝ وَلَا أَنْتُمْ عَابِدُونَ مَا أَعْبُدُ ۝ وَلَا أَنَا عَابِدٌ مَا عَبَدْتُمْ ۝ وَلَا أَنْتُمْ عَابِدُونَ مَا أَعْبُدُ ۝ لَكُمْ دِينُكُمْ وَلِيَ دِينِ", "pron": "কুল ইয়া আইয়ুহাল কাফিরূন। লা আ‘বুদু মা তা‘বুদূন। ওয়ালা আনতুম ‘আবিদূনা মা আ‘বুদ। ওয়ালা আনা ‘আবিদুম মা ‘আবাদতুম। ওয়ালা আনতুম ‘আবিদূনা মা আ‘বুদ। লাকুম দীনুকুম ওয়ালিয়া দীন।", "meaning": "বলুন, হে কাফিররা, তোমরা যার ইবাদত কর আমি তার ইবাদত করি না; আর আমি যার ইবাদত করি তোমরা তার ইবাদতকারী নও... তোমাদের জন্য তোমাদের দ্বীন, আর আমার জন্য আমার দ্বীন।"}, {"title": "সূরা আন-নাসর", "ref": "কুরআন 110", "url": "https://quran.com/110", "arabic": "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ ۝ وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا ۝ فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا", "pron": "ইযা জা-আ নাসরুল্লাহি ওয়াল ফাতহ। ওয়া রাইতান নাসা ইয়াদখুলূনা ফী দীনিল্লাহি আফওয়াজা। ফাসাব্বিহ বিহামদি রব্বিকা ওয়াস্তাগফিরহু, ইন্নাহু কানা তাওয়াবা।", "meaning": "যখন আল্লাহর সাহায্য ও বিজয় আসবে এবং আপনি মানুষকে দলে দলে আল্লাহর দ্বীনে প্রবেশ করতে দেখবেন, তখন আপনার রবের প্রশংসাসহ তাঁর পবিত্রতা ঘোষণা করুন ও তাঁর কাছে ক্ষমা চান; নিশ্চয়ই তিনি তাওবা কবুলকারী।"}, {"title": "সূরা আল-মাসাদ", "ref": "কুরআন 111", "url": "https://quran.com/111", "arabic": "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ ۝ مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ ۝ سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ ۝ وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ ۝ فِي جِيدِهَا حَبْلٌ مِنْ مَسَدٍ", "pron": "তাব্বাত ইয়াদা আবী লাহাবিওঁ ওয়া তাব্ব। মা আগনা ‘আনহু মালুহু ওয়া মা কাসাব। সাইয়াসলা নারান যাতা লাহাব। ওয়ামরা-আতুহু হাম্মালাতাল হাতাব। ফী জীদিহা হাবলুম মিম মাসাদ।", "meaning": "আবু লাহাবের দুই হাত ধ্বংস হোক, এবং সে ধ্বংস হয়েছে। তার সম্পদ ও উপার্জন তার কোনো কাজে আসেনি। সে শিখাময় আগুনে প্রবেশ করবে; তার স্ত্রীও—ইন্ধন বহনকারী; তার গলায় খেজুর-তন্তুর রশি থাকবে।"}];
+const DUAS=[{"title": "সানা / শুরুতে একটি সহিহ দোয়া", "arabic": "اللَّهُمَّ بَاعِدْ بَيْنِي وَبَيْنَ خَطَايَايَ كَمَا بَاعَدْتَ بَيْنَ الْمَشْرِقِ وَالْمَغْرِبِ، اللَّهُمَّ نَقِّنِي مِنَ الْخَطَايَا كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ، اللَّهُمَّ اغْسِلْ خَطَايَايَ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ", "pron": "আল্লাহুম্মা বা‘ইদ বাইনী ওয়া বাইনা খাতায়ায়া কামা বা‘আদতা বাইনাল মাশরিকি ওয়াল মাগরিব। আল্লাহুম্মা নাক্কিনী মিনাল খাতায়া কামা ইউনাক্কাস সাওবুল আবইয়াদু মিনাদ দানাস। আল্লাহুম্মাগসিল খাতায়ায়া বিল মা-ই ওয়াস সালজি ওয়াল বারাদ।", "meaning": "হে আল্লাহ, আমার ও আমার গুনাহগুলোর মধ্যে এমন দূরত্ব করে দিন যেমন পূর্ব ও পশ্চিমের মধ্যে করেছেন। আমাকে গুনাহ থেকে এমন পবিত্র করুন যেমন সাদা কাপড় ময়লা থেকে পরিষ্কার করা হয়। আমার গুনাহ পানি, বরফ ও শিলাবৃষ্টি দিয়ে ধুয়ে দিন।", "ref": "সহিহ আল-বুখারি 744", "url": "https://sunnah.com/bukhari:744"}, {"title": "রুকু", "arabic": "سُبْحَانَ رَبِّيَ الْعَظِيمِ", "pron": "সুবহানা রব্বিয়াল ‘আযীম", "meaning": "আমার মহান রব পবিত্র।", "ref": "সহিহ মুসলিম 772", "url": "https://sunnah.com/muslim:772"}, {"title": "রুকু থেকে ওঠা", "arabic": "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ<br>رَبَّنَا وَلَكَ الْحَمْدُ", "pron": "সামি‘আল্লাহু লিমান হামিদাহ। রব্বানা ওয়া লাকাল হামদ।", "meaning": "যে আল্লাহর প্রশংসা করে, আল্লাহ তার কথা শোনেন। হে আমাদের রব, আপনারই জন্য সব প্রশংসা।", "ref": "সহিহ আল-বুখারি 722", "url": "https://sunnah.com/bukhari:722"}, {"title": "সিজদা", "arabic": "سُبْحَانَ رَبِّيَ الْأَعْلَى", "pron": "সুবহানা রব্বিয়াল আ‘লা", "meaning": "আমার সর্বোচ্চ রব পবিত্র।", "ref": "সহিহ মুসলিম 772", "url": "https://sunnah.com/muslim:772"}, {"title": "দুই সিজদার মাঝে", "arabic": "رَبِّ اغْفِرْ لِي، رَبِّ اغْفِرْ لِي", "pron": "রব্বিগফির লী, রব্বিগফির লী।", "meaning": "হে আমার রব, আমাকে ক্ষমা করুন; হে আমার রব, আমাকে ক্ষমা করুন।", "ref": "সুনান ইবন মাজাহ 897 — সহিহ", "url": "https://sunnah.com/ibnmajah:897"}, {"title": "তাশাহহুদ", "arabic": "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ", "pron": "আত-তাহিয়্যাতু লিল্লাহি ওয়াস সালাওয়াতু ওয়াত তাইয়্যিবাত। আসসালামু ‘আলাইকা আইয়ুহান নাবিয়্যু ওয়া রহমাতুল্লাহি ওয়া বারাকাতুহ। আসসালামু ‘আলাইনা ওয়া ‘আলা ‘ইবাদিল্লাহিস সালিহীন। আশহাদু আল্লা ইলাহা ইল্লাল্লাহ, ওয়া আশহাদু আন্না মুহাম্মাদান ‘আবদুহু ওয়া রাসূলুহ।", "meaning": "সব সম্মান, ইবাদত ও পবিত্র বিষয় আল্লাহর জন্য। হে নবী, আপনার উপর শান্তি, আল্লাহর রহমত ও বরকত বর্ষিত হোক। আমাদের এবং আল্লাহর নেক বান্দাদের উপর শান্তি বর্ষিত হোক। আমি সাক্ষ্য দিচ্ছি, আল্লাহ ছাড়া কোনো সত্য উপাস্য নেই এবং মুহাম্মদ তাঁর বান্দা ও রাসূল।", "ref": "সহিহ আল-বুখারি 831", "url": "https://sunnah.com/bukhari:831"}, {"title": "দরুদ ইবরাহিম", "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ", "pron": "আল্লাহুম্মা সাল্লি ‘আলা মুহাম্মাদিওঁ ওয়া ‘আলা আ-লি মুহাম্মাদ, কামা সাল্লাইতা ‘আলা ইবরাহীমা ওয়া ‘আলা আ-লি ইবরাহীম, ইন্নাকা হামিদুম মাজীদ। আল্লাহুম্মা বারিক ‘আলা মুহাম্মাদিওঁ ওয়া ‘আলা আ-লি মুহাম্মাদ, কামা বারাকতা ‘আলা ইবরাহীমা ওয়া ‘আলা আ-লি ইবরাহীম, ইন্নাকা হামিদুম মাজীদ।", "meaning": "হে আল্লাহ, মুহাম্মদ ও তাঁর পরিবারবর্গের উপর রহমত বর্ষণ করুন, যেমন ইবরাহীম ও তাঁর পরিবারবর্গের উপর করেছেন; নিশ্চয়ই আপনি প্রশংসিত, মহিমান্বিত। হে আল্লাহ, মুহাম্মদ ও তাঁর পরিবারবর্গকে বরকত দিন, যেমন ইবরাহীম ও তাঁর পরিবারবর্গকে বরকত দিয়েছেন; নিশ্চয়ই আপনি প্রশংসিত, মহিমান্বিত।", "ref": "সহিহ আল-বুখারি 3370", "url": "https://sunnah.com/bukhari:3370"}, {"title": "সালামের আগে চার বিষয় থেকে আশ্রয়", "arabic": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ جَهَنَّمَ، وَمِنْ عَذَابِ الْقَبْرِ، وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ، وَمِنْ شَرِّ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ", "pron": "আল্লাহুম্মা ইন্নী আ‘উযু বিকা মিন ‘আযাবি জাহান্নাম, ওয়া মিন ‘আযাবিল কবর, ওয়া মিন ফিতনাতিল মাহইয়া ওয়াল মামাত, ওয়া মিন শাররি ফিতনাতিল মাসীহিদ দাজ্জাল।", "meaning": "হে আল্লাহ, আমি আপনার কাছে জাহান্নামের শাস্তি, কবরের শাস্তি, জীবন ও মৃত্যুর ফিতনা এবং মসীহ দাজ্জালের ফিতনার অনিষ্ট থেকে আশ্রয় চাই।", "ref": "সহিহ মুসলিম 588", "url": "https://sunnah.com/muslim:588"}];
+const BASICS=[
+{"title":"অজুর কুরআনিক মূল ধাপ","ref":"কুরআন 5:6","url":"https://quran.com/5/6","arabic":"","pron":"","meaning":"সালাতের জন্য অজুতে মুখ ধোবেন, কনুইসহ দুই হাত ধোবেন, মাথা মাসেহ করবেন এবং টাখনুসহ দুই পা ধোবেন। অপবিত্র অবস্থায় গোসলের নির্দেশও একই আয়াতে আছে।"},
+{"title":"সালাত নির্ধারিত সময়ে","ref":"কুরআন 4:103","url":"https://quran.com/4/103","arabic":"","pron":"","meaning":"আল্লাহ মুমিনদের উপর সালাত নির্ধারিত সময়ে ফরজ করেছেন। তাই পাঁচ ওয়াক্তের সময় জেনে সময়মতো আদায় করবেন।"},
+{"title":"কিবলামুখী হওয়া","ref":"কুরআন 2:144","url":"https://quran.com/2/144","arabic":"","pron":"","meaning":"সালাতে মসজিদুল হারামের দিকে মুখ করুন। অবস্থান অনুযায়ী কিবলার দিক নির্ভরযোগ্যভাবে নিশ্চিত করুন।"},
+{"title":"আযান — মূল শব্দগুলো","ref":"সুনান আবু দাউদ 499 — সহিহ/হাসান সহিহ হিসেবে গৃহীত","url":"https://sunnah.com/abudawud:499","arabic":"اللَّهُ أَكْبَرُ ×٤<br>أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ ×٢<br>أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ ×٢<br>حَيَّ عَلَى الصَّلَاةِ ×٢<br>حَيَّ عَلَى الْفَلَاحِ ×٢<br>اللَّهُ أَكْبَرُ ×٢<br>لَا إِلَهَ إِلَّا اللَّهُ ×١","pron":"আল্লাহু আকবার ৪ বার। আশহাদু আল্লা ইলাহা ইল্লাল্লাহ ২ বার। আশহাদু আন্না মুহাম্মাদার রাসূলুল্লাহ ২ বার। হাইয়া ‘আলাস সালাহ ২ বার। হাইয়া ‘আলাল ফালাহ ২ বার। আল্লাহু আকবার ২ বার। লা ইলাহা ইল্লাল্লাহ ১ বার।","meaning":"আল্লাহ সর্বশ্রেষ্ঠ। আমি সাক্ষ্য দিচ্ছি আল্লাহ ছাড়া কোনো সত্য উপাস্য নেই। আমি সাক্ষ্য দিচ্ছি মুহাম্মদ ﷺ আল্লাহর রাসূল। সালাতের দিকে আসুন। সফলতার দিকে আসুন। শেষে আল্লাহর মহত্ত্ব ও একত্ব ঘোষণা।"},
+{"title":"ফজরের আযানে অতিরিক্ত বাক্য","ref":"সুনান আবু দাউদ 500 — সহিহ","url":"https://sunnah.com/abudawud:500","arabic":"الصَّلَاةُ خَيْرٌ مِنَ النَّوْمِ ×٢","pron":"আস-সালাতু খাইরুম মিনান নাওম — ২ বার।","meaning":"সালাত ঘুমের চেয়ে উত্তম। ফজরের আযানে এই বাক্য বলা হয়।"},
+{"title":"আযানের জবাব","ref":"সহিহ মুসলিম 385","url":"https://sunnah.com/muslim:385","arabic":"لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ","pron":"লা হাওলা ওয়া লা কুওয়াতা ইল্লা বিল্লাহ।","meaning":"মুয়াজ্জিনের বাক্যগুলো অনুসরণ করে বলবেন। তবে ‘হাইয়া ‘আলাস সালাহ’ ও ‘হাইয়া ‘আলাল ফালাহ’-এর জবাবে বলবেন: লা হাওলা ওয়া লা কুওয়াতা ইল্লা বিল্লাহ — আল্লাহর সাহায্য ছাড়া কোনো শক্তি ও সামর্থ্য নেই।"},
+{"title":"আযানের পরের দোয়া","ref":"সহিহ আল-বুখারি 614","url":"https://sunnah.com/bukhari:614","arabic":"اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ الْقَائِمَةِ، آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ","pron":"আল্লাহুম্মা রব্বা হাজিহিদ দা‘ওয়াতিত তাম্মাহ, ওয়াস সালাতিল কা-ইমাহ, আতি মুহাম্মাদানিল ওয়াসীলাতা ওয়াল ফাদীলাহ, ওয়াব‘আসহু মাকামাম মাহমূদানিল্লাযী ওয়া‘আদতাহ।","meaning":"হে আল্লাহ, এই পূর্ণ আহ্বান ও প্রতিষ্ঠিতব্য সালাতের রব, মুহাম্মদ ﷺ-কে ওসিলা ও মর্যাদা দান করুন এবং তাঁকে সেই প্রশংসিত স্থানে প্রতিষ্ঠিত করুন যার প্রতিশ্রুতি আপনি দিয়েছেন।"},
+{"title":"দোয়া কুনুত — বিতর","ref":"জামে আত-তিরমিযি 464 — হাসান","url":"https://sunnah.com/tirmidhi:464","arabic":"اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ، وَعَافِنِي فِيمَنْ عَافَيْتَ، وَتَوَلَّنِي فِيمَنْ تَوَلَّيْتَ، وَبَارِكْ لِي فِيمَا أَعْطَيْتَ، وَقِنِي شَرَّ مَا قَضَيْتَ، فَإِنَّكَ تَقْضِي وَلَا يُقْضَى عَلَيْكَ، وَإِنَّهُ لَا يَذِلُّ مَنْ وَالَيْتَ، تَبَارَكْتَ رَبَّنَا وَتَعَالَيْتَ","pron":"আল্লাহুম্মাহদিনী ফীমান হাদাইত, ওয়া ‘আফিনী ফীমান ‘আফাইত, ওয়া তাওয়াল্লানী ফীমান তাওয়াল্লাইত, ওয়া বারিক লী ফীমা আ‘তাইত, ওয়া কিনী শাররা মা কাদাইত, ফা ইন্নাকা তাকদী ওয়া লা ইউকদা ‘আলাইকা, ওয়া ইন্নাহু লা ইয়াযিল্লু মান ওয়ালাইত, তাবারাকতা রব্বানা ওয়া তা‘আলাইত।","meaning":"হে আল্লাহ, যাদের আপনি হিদায়াত দিয়েছেন তাদের সঙ্গে আমাকেও হিদায়াত দিন; যাদের নিরাপত্তা দিয়েছেন তাদের সঙ্গে আমাকেও নিরাপত্তা দিন; যাদের অভিভাবকত্ব নিয়েছেন তাদের সঙ্গে আমারও অভিভাবক হোন; আমাকে যা দিয়েছেন তাতে বরকত দিন; আপনার ফয়সালার অনিষ্ট থেকে আমাকে রক্ষা করুন। আপনি ফয়সালা করেন, আপনার উপর কেউ ফয়সালা করতে পারে না। আপনি যার বন্ধু হন সে অপমানিত হয় না। হে আমাদের রব, আপনি বরকতময় ও মহান।"},
+{"title":"নিয়ত সম্পর্কে","ref":"সহিহ আল-বুখারি 1","url":"https://sunnah.com/bukhari:1","arabic":"","pron":"","meaning":"নিয়ত অন্তরের সংকল্প। সালাতের জন্য আলাদা বানানো আরবি নিয়ত-বাক্যকে বাধ্যতামূলক মনে করবেন না। আমল নিয়তের উপর নির্ভরশীল—এটি সহিহ হাদিসের মূলনীতি।"}
 ];
-
-const GROUPS={morning:['🌅','সকাল'],prayer:['🕌','সালাতের পর'],evening:['🌇','সন্ধ্যা'],daily:['☀️','দিনে'],night:['🌙','রাত']};
+const PRAYERS=[["ফজর", "২ ফরজ", "২ রাকাত সুন্নাহ আগে", "সহিহ বুখারি 1180; সহিহ মুসলিম 729"], ["যোহর", "৪ ফরজ", "২ রাকাত সুন্নাহ আগে + ২ পরে", "সহিহ বুখারি 1180; সহিহ মুসলিম 729"], ["আসর", "৪ ফরজ", "এই app-এ কেবল সহিহভাবে স্পষ্ট rawatib তালিকাই দেখানো হয়েছে", "—"], ["মাগরিব", "৩ ফরজ", "২ রাকাত সুন্নাহ পরে", "সহিহ বুখারি 1180; সহিহ মুসলিম 729"], ["ইশা", "৪ ফরজ", "২ রাকাত সুন্নাহ পরে; এরপর বিতর আলাদা সালাত", "সহিহ বুখারি 1180; সহিহ মুসলিম 729"]];
+const TOTAL=DAILY.length;
 const keyDate=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-let installPrompt=null,currentFilter='all';
-const load=()=>JSON.parse(localStorage.getItem('amal-'+keyDate())||'{}');
-function save(s){localStorage.setItem('amal-'+keyDate(),JSON.stringify(s));updateStreak(s)}
-function bn(n){return String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d])}
-function cardHTML(x,done){return `<article class="card${done?' done':''}" data-group="${x.group}">
-  <div class="cardMain">
-    <button class="check" aria-label="${x.title} সম্পন্ন হিসেবে চিহ্নিত করুন">${done?'✓':''}</button>
-    <div class="meta"><div class="title">${x.icon} ${x.title}</div><div class="when">${x.when}</div><span class="badge">${x.tag}</span></div>
-    <button class="more" aria-label="বিস্তারিত দেখুন">⌄</button>
-  </div>
-  <div class="details">
-    ${x.arabic?`<div class="arabic">${x.arabic}</div>`:''}
-    ${x.pron?`<div class="block"><div class="label">বাংলা উচ্চারণ</div><div class="txt pron">${x.pron}</div></div>`:''}
-    <div class="block"><div class="label">কী করবেন / অর্থ</div><div class="txt">${x.meaning}</div></div>
-    <div class="block"><div class="label">ফজিলত</div><div class="txt virtue">${x.virtue}</div></div>
-    <div class="block"><div class="label">রেফারেন্স</div><div class="ref">${x.ref} <a target="_blank" rel="noopener" href="${x.url}">হাদিস দেখুন ↗</a></div></div>
-  </div>
-</article>`}
-function render(){
-  const s=load(),root=document.getElementById('list');root.innerHTML='';
-  const visible=A.filter(x=>currentFilter==='all'||x.group===currentFilter);
-  Object.entries(GROUPS).forEach(([g,[icon,label]])=>{
-    const items=visible.filter(x=>x.group===g); if(!items.length)return;
-    const section=document.createElement('section');section.className='section';
-    const completed=items.filter(x=>s[x.id]).length;
-    section.innerHTML=`<div class="sectionLabel"><span>${icon}</span>${label}<div class="sectionCount">${bn(completed)}/${bn(items.length)}</div></div>`;
-    items.forEach(x=>{
-      const wrap=document.createElement('div');wrap.innerHTML=cardHTML(x,!!s[x.id]);const card=wrap.firstElementChild;
-      card.querySelector('.check').onclick=()=>{s[x.id]=!s[x.id];save(s);render()};
-      card.querySelector('.more').onclick=()=>card.classList.toggle('open');
-      card.querySelector('.cardMain').onclick=(e)=>{if(e.target.closest('.check')||e.target.closest('.more'))return;card.classList.toggle('open')};
-      section.appendChild(card)
-    });root.appendChild(section)
-  });
-  document.getElementById('empty').style.display=visible.length?'none':'block';updateTop(s)
+const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const state=()=>JSON.parse(localStorage.getItem('amal-'+keyDate())||'{}');
+function history(){return JSON.parse(localStorage.getItem('amal-history')||'{}')}
+function save(s){
+ localStorage.setItem('amal-'+keyDate(),JSON.stringify(s));
+ const h=history(); h[keyDate()]=Object.values(s).filter(Boolean).length; localStorage.setItem('amal-history',JSON.stringify(h));
+ renderDaily();renderHistory();
 }
-function updateTop(s){
-  const n=A.filter(x=>s[x.id]).length, pct=Math.round(n/A.length*100);
-  document.getElementById('count').textContent=`${bn(n)} / ${bn(A.length)} সম্পন্ন`;
-  document.getElementById('bar').style.width=pct+'%';
-  document.getElementById('dateLabel').textContent=new Date().toLocaleDateString('bn-BD',{day:'numeric',month:'short'});
-  document.getElementById('streak').textContent='🔥 '+bn(Number(localStorage.getItem('streak')||0))+' দিন';
+function cardHtml(x,checkable=false,s=null){
+ return `<article class="card ${checkable&&s[x.id]?'done':''}"><div class="head">${checkable?`<button class="check">${s[x.id]?'✓':''}</button>`:''}<div class="meta"><div class="title">${x.title}</div><div class="when">${x.when||x.ref||''}</div></div><button class="toggle">বিস্তারিত</button></div><div class="details">${x.arabic?`<div class="arabic">${x.arabic}</div>`:''}${x.pron!==undefined?`<div class="label">বাংলা উচ্চারণ</div><div class="txt">${x.pron||'—'}</div>`:''}<div class="label">অর্থ / কী করবেন</div><div class="txt">${x.meaning||''}</div>${x.virtue?`<div class="label">ফজিলত</div><div class="txt">${x.virtue}</div>`:''}<div class="label">রেফারেন্স</div><div class="ref">${x.ref||''} ${x.url?`<a target="_blank" rel="noopener" href="${x.url}">Source ↗</a>`:''}</div></div></article>`
 }
-function updateStreak(s){
-  if(A.filter(x=>s[x.id]).length!==A.length)return;
-  const today=keyDate(),last=localStorage.getItem('streak-last');if(last===today)return;
-  let st=Number(localStorage.getItem('streak')||0);
-  if(last){const prev=new Date(last+'T00:00:00'),cur=new Date(today+'T00:00:00');const d=Math.round((cur-prev)/86400000);st=d===1?st+1:1}else st=1;
-  localStorage.setItem('streak',st);localStorage.setItem('streak-last',today)
+function renderDaily(){
+ const s=state(), box=document.getElementById('dailyList'); box.innerHTML='';
+ DAILY.forEach(x=>{const wrap=document.createElement('div');wrap.innerHTML=cardHtml(x,true,s);const c=wrap.firstElementChild;
+ c.querySelector('.check').onclick=()=>{s[x.id]=!s[x.id];save(s)};
+ c.querySelector('.toggle').onclick=()=>c.classList.toggle('open'); box.appendChild(c);});
+ const n=Object.values(s).filter(Boolean).length;document.getElementById('count').textContent=`${bn(n)} / ${bn(TOTAL)} সম্পন্ন`;document.getElementById('bar').style.width=(n/TOTAL*100)+'%';document.getElementById('dateLabel').textContent=new Date().toLocaleDateString('bn-BD',{day:'numeric',month:'short'});
+ document.getElementById('streak').textContent='🔥 '+bn(calcStreak())+' দিন';
 }
-document.getElementById('filters').onclick=e=>{const b=e.target.closest('.filter');if(!b)return;currentFilter=b.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()};
-document.getElementById('resetBtn').onclick=()=>{if(confirm('আজকের সব টিক মুছে ফেলবেন?')){localStorage.removeItem('amal-'+keyDate());render()}};
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
-document.getElementById('installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null}else alert('Chrome menu → Install app / Add to Home screen চাপুন।')};
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
-render();
+function calcStreak(){const h=history();let d=new Date(),st=0;for(let i=0;i<366;i++){const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if((h[k]||0)===TOTAL){st++;d.setDate(d.getDate()-1)}else{if(i===0){d.setDate(d.getDate()-1);continue}break}}return st}
+function simpleRender(arr,id){
+ const box=document.getElementById(id);box.innerHTML='';arr.forEach(x=>{const w=document.createElement('div');w.innerHTML=cardHtml(x,false,{});const c=w.firstElementChild;c.querySelector('.toggle').onclick=()=>c.classList.toggle('open');box.appendChild(c)})
+}
+function renderWaqt(){const g=document.getElementById('waqtGrid');g.innerHTML='';PRAYERS.forEach(p=>{const d=document.createElement('div');d.className='waqt';d.innerHTML=`<b>${p[0]}</b><span>${p[1]}</span>`;d.onclick=()=>alert(`${p[0]}\n${p[1]}\n${p[2]}\n${p[3]}`);g.appendChild(d)})}
+const steps=[
+['১. তাকবিরে তাহরিমা','কিবলামুখী হয়ে “আল্লাহু আকবার” বলে সালাত শুরু করুন।'],
+['২. কিয়াম ও কিরাআত','প্রথম দুই রাকাতে সূরা ফাতিহা পড়ুন; এরপর কুরআনের অংশ পড়ুন। ফাতিহা সালাতের মৌলিক কিরাআত।'],
+['৩. রুকু','“আল্লাহু আকবার” বলে রুকু করুন; “সুবহানা রব্বিয়াল ‘আযীম” পড়ুন।'],
+['৪. কওমা','রুকু থেকে উঠে “সামি‘আল্লাহু লিমান হামিদাহ”; এরপর “রব্বানা ওয়া লাকাল হামদ”। জামাতে মুক্তাদি ইমামের অনুসরণ করবে।'],
+['৫. দুই সিজদা','“আল্লাহু আকবার” বলে সিজদা; “সুবহানা রব্বিয়াল আ‘লা”; মাঝখানে বসে “রব্বিগফির লী”। তারপর দ্বিতীয় সিজদা।'],
+['৬. দ্বিতীয় রাকাত','আবার কিয়াম, ফাতিহা, কিরাআত, রুকু, কওমা ও দুই সিজদা। ২ রাকাত হলে শেষ বৈঠক; ৩/৪ রাকাত হলে প্রথম তাশাহহুদের পর উঠে বাকি রাকাত।'],
+['৭. শেষ বৈঠক','তাশাহহুদ, দরুদ ইবরাহিম এবং সহিহ দোয়া পড়ে সালাম ফিরিয়ে সালাত শেষ করুন।']
+];
+function renderSteps(){const b=document.getElementById('steps');b.innerHTML=steps.map(s=>`<div class="guide-step"><b>${s[0]}</b><p>${s[1]}</p></div>`).join('')}
+function smart(){
+ const h=new Date().getHours(),e=document.getElementById('smart');let t='আজকের আমল সহজভাবে সম্পন্ন করুন।';
+ if(h<11)t='🌅 সকাল: সকালের ৩ কুল ও সাইয়্যিদুল ইস্তিগফার মনে রাখুন।';
+ else if(h>=16&&h<21)t='🌇 সন্ধ্যা: সন্ধ্যার ৩ কুল ও সাইয়্যিদুল ইস্তিগফার মনে রাখুন।';
+ else if(h>=21||h<5)t='🌙 রাত: ঘুমের আগে আয়াতুল কুরসি মনে রাখুন।';
+ e.textContent=t;
+}
+function renderHistory(){
+ const h=history(),cal=document.getElementById('calendar');cal.innerHTML='';let full=0,partial=0;
+ for(let i=29;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');const n=h[k]||0;if(n===TOTAL)full++; else if(n>0)partial++;const x=document.createElement('div');x.className='day '+(n===TOTAL?'full':n>0?'partial':'empty');x.title=`${k}: ${n}/${TOTAL}`;x.textContent=bn(d.getDate());cal.appendChild(x)}
+ document.getElementById('historySummary').textContent=`পূর্ণ দিন: ${bn(full)} • আংশিক দিন: ${bn(partial)}`;
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(b.dataset.view).classList.add('active')})
+document.getElementById('search').oninput=e=>{const q=e.target.value.trim().toLowerCase();simpleRender(SURAHS.filter(x=>(x.title+x.pron+x.meaning).toLowerCase().includes(q)),'surahList');simpleRender(DUAS.filter(x=>(x.title+x.pron+x.meaning).toLowerCase().includes(q)),'duaList')}
+let tc=Number(localStorage.getItem('tas-count')||0);const showTas=()=>document.getElementById('tasCount').textContent=bn(tc);document.getElementById('plus').onclick=()=>{tc++;localStorage.setItem('tas-count',tc);if(navigator.vibrate&&tc%33===0)navigator.vibrate(35);showTas()};document.getElementById('tasReset').onclick=()=>{tc=0;localStorage.setItem('tas-count',0);showTas()};
+document.getElementById('themeBtn').onclick=()=>{const n=document.documentElement.dataset.theme==='dark'?'':'dark';document.documentElement.dataset.theme=n;localStorage.setItem('theme',n)};
+const savedTheme=localStorage.getItem('theme');if(savedTheme)document.documentElement.dataset.theme=savedTheme;
+document.getElementById('fontRange').oninput=e=>{document.documentElement.style.setProperty('--ar',e.target.value+'px');localStorage.setItem('ar-size',e.target.value)};const as=localStorage.getItem('ar-size');if(as){document.documentElement.style.setProperty('--ar',as+'px');document.getElementById('fontRange').value=as}
+document.getElementById('backup').onclick=()=>{const data={version:2,history:history(),tas:tc,theme:localStorage.getItem('theme')||'',arSize:localStorage.getItem('ar-size')||26,daily:{}};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('amal-20'))data.daily[k]=JSON.parse(localStorage.getItem(k)||'{}')}const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='amar-amal-backup.json';a.click();URL.revokeObjectURL(a.href)};
+document.getElementById('restoreBtn').onclick=()=>document.getElementById('restoreFile').click();document.getElementById('restoreFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.history)localStorage.setItem('amal-history',JSON.stringify(d.history));Object.entries(d.daily||{}).forEach(([k,v])=>localStorage.setItem(k,JSON.stringify(v)));if(d.tas!==undefined)localStorage.setItem('tas-count',d.tas);alert('Restore complete. App reload হবে।');location.reload()}catch(_ ){alert('Backup file সঠিক নয়।')}};r.readAsText(f)};
+document.getElementById('resetBtn').onclick=()=>{if(confirm('আজকের সব check মুছে ফেলবেন?')){localStorage.removeItem('amal-'+keyDate());const h=history();delete h[keyDate()];localStorage.setItem('amal-history',JSON.stringify(h));renderDaily();renderHistory()}};
+let installPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});document.getElementById('installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null}else alert(/iPhone|iPad|iPod/.test(navigator.userAgent)?'iPhone/iPad: Safari → Share → Add to Home Screen ব্যবহার করুন।':'Chrome menu → Add to Home screen / Install app ব্যবহার করুন।')};
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+renderDaily();simpleRender(BASICS,'basicList');simpleRender(SURAHS,'surahList');simpleRender(DUAS,'duaList');renderWaqt();renderSteps();renderHistory();showTas();smart();
 </script>
-</body>
-</html>
+</body></html>
