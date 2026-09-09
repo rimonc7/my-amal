@@ -32,13 +32,15 @@ h1{margin:0 0 5px;font-size:27px} .sub{font-size:13px;opacity:.9;line-height:1.5
 .footer{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:9px} .footer .inner{max-width:760px;margin:auto;display:flex;gap:8px} .footer button{flex:1}
 .tiny{font-size:11px;color:var(--muted);line-height:1.6;margin:12px 2px} .hidden{display:none}
 @media(max-width:430px){.tools{grid-template-columns:1fr} .grid5{grid-template-columns:repeat(5,1fr)}}
+
+.prayerStack{display:grid;gap:12px}.prayerCard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}.prayerTop{display:flex;justify-content:space-between;gap:10px;align-items:center}.prayerTop h3{margin:0;font-size:18px}.totalBadge{background:var(--soft);color:var(--brand);font-weight:900;font-size:11px;padding:6px 9px;border-radius:99px}.seq{display:flex;gap:7px;overflow-x:auto;padding:11px 1px 5px;scrollbar-width:none}.seq::-webkit-scrollbar{display:none}.rak{min-width:98px;border:1px solid var(--line);border-radius:13px;padding:9px 8px;background:var(--bg);text-align:center}.rak strong{display:block;font-size:16px}.rak small{display:block;color:var(--muted);font-size:10px;line-height:1.35;margin-top:2px}.rak.fard{background:var(--brand);color:#fff;border-color:var(--brand)}.rak.fard small{color:#ffffffcc}.rak.emph{outline:2px solid color-mix(in srgb,var(--brand) 35%,transparent)}.rak.opt{border-style:dashed}.arrow{align-self:center;color:var(--muted);font-weight:900;flex:0 0 auto}.evidence{font-size:12px;color:var(--muted);line-height:1.65;margin-top:9px}.evidence a{font-weight:800}.legend{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 12px}.legend span{font-size:11px;padding:5px 8px;border-radius:99px;border:1px solid var(--line);background:var(--card)}.fardMap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.mapCard{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:12px}.mapCard h3{margin:0 0 7px;font-size:15px}.mapLine{font-size:12px;line-height:1.65;color:var(--muted)}.mapLine b{color:var(--ink)}@media(max-width:430px){.fardMap{grid-template-columns:1fr}.rak{min-width:90px}}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="top">
 <h1>আমার আমল</h1>
-<div class="sub">দৈনিক আমল অংশ সহজ রাখা হয়েছে। আলাদা অংশে সালাতের নিয়ম, প্রয়োজনীয় সূরা-দোয়া ও ব্যক্তিগত টুলস আছে।</div>
+<div class="sub">দৈনিক আমল আগের মতো সহজ। সালাত গাইডে এখন ওয়াক্তভিত্তিক পূর্ণ রাকাত sequence, ফরজের ভেতরের ধাপ, সূরা-দোয়া ও দলিল একসাথে আছে।</div>
 <div class="progress"><div class="bar" id="bar"></div></div>
 <div class="stats"><span id="count"></span><span id="streak"></span></div>
 </header>
@@ -58,13 +60,18 @@ h1{margin:0 0 5px;font-size:27px} .sub{font-size:13px;opacity:.9;line-height:1.5
 </section>
 
 <section class="view" id="salah">
-<div class="section-title"><h2>ওয়াক্তভিত্তিক সালাত</h2><span class="pill">ফরজ + সহিহ rawatib</span></div>
-<div class="grid5" id="waqtGrid"></div>
+<div class="section-title"><h2>ওয়াক্তভিত্তিক পূর্ণ সিকোয়েন্স</h2><span class="pill">আগে → ফরজ → পরে</span></div>
+<div class="note"><b>কীভাবে পড়বেন:</b> নিচের ক্রমে নির্দিষ্টভাবে প্রমাণিত সুন্নাহ/নফল ও ফরজ দেখানো হয়েছে। <b>ফরজ সবসময় কেন্দ্রীয় অংশ</b>; “ঐচ্ছিক” লেখা অংশ বাদ দিলে গুনাহ নয়। Rawatib-এর বর্ণনায় সহিহ হাদিসে ১০ ও ১২ রাকাত—দুই ধরনের বর্ণনা আছে; এখানে ১২ রাকাতের স্পষ্ট বর্ণনাকে মূল sequence হিসেবে দেখানো হয়েছে এবং ভিন্ন সহিহ বর্ণনাও reference-এ রাখা হয়েছে।</div>
+<div class="legend"><span>🟩 ফরজ</span><span>⭐ নিয়মিত সুন্নাহ/Rawatib</span><span>○ ঐচ্ছিক/গায়রে মুয়াক্কাদাহ</span></div>
+<div class="prayerStack" id="prayerStack"></div>
+<div class="section-title"><h2>ফরজ রাকাতের ভেতরের ম্যাপ</h2><span class="pill">২ / ৩ / ৪ রাকাত</span></div>
+<div class="fardMap" id="fardMap"></div>
 <div class="note"><b>নিয়ত:</b> নিয়ত অন্তরের কাজ। নির্দিষ্ট আরবি “নিয়তের বাক্য” নবী ﷺ থেকে সহিহভাবে নির্ধারিত নেই, তাই app-এ বানানো কোনো নিয়ত বাক্য রাখা হয়নি।</div>
 <div class="section-title"><h2>একাকী / জামাতে</h2></div>
-<div class="guide-step"><b>একাকী:</b><p>কিবলামুখী হয়ে সালাত শুরু করুন, রুকু-সিজদা ও বৈঠকগুলো ধীরস্থিরভাবে আদায় করুন। নবী ﷺ বলেছেন, “তোমরা আমাকে যেভাবে সালাত আদায় করতে দেখ, সেভাবে সালাত আদায় কর।” <a href="https://sunnah.com/bukhari:631" target="_blank">সহিহ বুখারি 631 ↗</a></p></div>
-<div class="guide-step"><b>জামাতে:</b><p>ইমামকে অনুসরণ করবেন; ইমামের আগে রুকু/সিজদায় যাবেন না। ইমাম রুকু করলে রুকু, সিজদা করলে সিজদা। কাতার সোজা রাখুন। <a href="https://sunnah.com/bukhari:722" target="_blank">সহিহ বুখারি 722 ↗</a></p></div>
-<div class="note">ইমামের পেছনে কিরাআত, হাত বাঁধার স্থান, আঙুল নড়ানো ইত্যাদি কিছু বিষয়ে ফিকহি মতভেদ আছে। এই app মতভেদপূর্ণ বিষয়ে একটিকে “একমাত্র সহিহ পদ্ধতি” বলে চাপিয়ে দেয় না।</div>
+<div class="guide-step"><b>একাকী:</b><p>কিবলামুখী হয়ে সালাত শুরু করুন, রুকু-সিজদা ও বৈঠকগুলো ধীরস্থিরভাবে আদায় করুন। নবী ﷺ বলেছেন, “তোমরা আমাকে যেভাবে সালাত আদায় করতে দেখ, সেভাবে সালাত আদায় কর।” <a href="https://sunnah.com/bukhari:631" target="_blank" rel="noopener">সহিহ বুখারি 631 ↗</a></p></div>
+<div class="guide-step"><b>জামাতে:</b><p>ইমামকে অনুসরণ করবেন; ইমামের আগে রুকু/সিজদায় যাবেন না। ইমাম রুকু করলে রুকু, সিজদা করলে সিজদা। <a href="https://sunnah.com/bukhari:722" target="_blank" rel="noopener">সহিহ বুখারি 722 ↗</a></p></div>
+<div class="guide-step"><b>আযান ও ইকামতের মাঝখানে:</b><p>নির্দিষ্ট নিষিদ্ধ সময় ছাড়া ইচ্ছুক ব্যক্তি নফল পড়তে পারেন। <a href="https://sunnah.com/bukhari:627" target="_blank" rel="noopener">সহিহ বুখারি 627 ↗</a></p></div>
+<div class="note">ফজরের ফরজের পর সূর্য ওঠা পর্যন্ত এবং আসরের ফরজের পর সূর্যাস্ত পর্যন্ত সাধারণ নফল সালাত না পড়ার নির্দেশ এসেছে। <a href="https://sunnah.com/bukhari:586" target="_blank" rel="noopener">সহিহ বুখারি 586 ↗</a></div>
 <div class="section-title"><h2>রাকাতের মূল ধাপ</h2></div>
 <div id="steps"></div>
 </section>
@@ -112,7 +119,18 @@ const BASICS=[
 {"title":"দোয়া কুনুত — বিতর","ref":"জামে আত-তিরমিযি 464 — হাসান","url":"https://sunnah.com/tirmidhi:464","arabic":"اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ، وَعَافِنِي فِيمَنْ عَافَيْتَ، وَتَوَلَّنِي فِيمَنْ تَوَلَّيْتَ، وَبَارِكْ لِي فِيمَا أَعْطَيْتَ، وَقِنِي شَرَّ مَا قَضَيْتَ، فَإِنَّكَ تَقْضِي وَلَا يُقْضَى عَلَيْكَ، وَإِنَّهُ لَا يَذِلُّ مَنْ وَالَيْتَ، تَبَارَكْتَ رَبَّنَا وَتَعَالَيْتَ","pron":"আল্লাহুম্মাহদিনী ফীমান হাদাইত, ওয়া ‘আফিনী ফীমান ‘আফাইত, ওয়া তাওয়াল্লানী ফীমান তাওয়াল্লাইত, ওয়া বারিক লী ফীমা আ‘তাইত, ওয়া কিনী শাররা মা কাদাইত, ফা ইন্নাকা তাকদী ওয়া লা ইউকদা ‘আলাইকা, ওয়া ইন্নাহু লা ইয়াযিল্লু মান ওয়ালাইত, তাবারাকতা রব্বানা ওয়া তা‘আলাইত।","meaning":"হে আল্লাহ, যাদের আপনি হিদায়াত দিয়েছেন তাদের সঙ্গে আমাকেও হিদায়াত দিন; যাদের নিরাপত্তা দিয়েছেন তাদের সঙ্গে আমাকেও নিরাপত্তা দিন; যাদের অভিভাবকত্ব নিয়েছেন তাদের সঙ্গে আমারও অভিভাবক হোন; আমাকে যা দিয়েছেন তাতে বরকত দিন; আপনার ফয়সালার অনিষ্ট থেকে আমাকে রক্ষা করুন। আপনি ফয়সালা করেন, আপনার উপর কেউ ফয়সালা করতে পারে না। আপনি যার বন্ধু হন সে অপমানিত হয় না। হে আমাদের রব, আপনি বরকতময় ও মহান।"},
 {"title":"নিয়ত সম্পর্কে","ref":"সহিহ আল-বুখারি 1","url":"https://sunnah.com/bukhari:1","arabic":"","pron":"","meaning":"নিয়ত অন্তরের সংকল্প। সালাতের জন্য আলাদা বানানো আরবি নিয়ত-বাক্যকে বাধ্যতামূলক মনে করবেন না। আমল নিয়তের উপর নির্ভরশীল—এটি সহিহ হাদিসের মূলনীতি।"}
 ];
-const PRAYERS=[["ফজর", "২ ফরজ", "২ রাকাত সুন্নাহ আগে", "সহিহ বুখারি 1180; সহিহ মুসলিম 729"], ["যোহর", "৪ ফরজ", "২ রাকাত সুন্নাহ আগে + ২ পরে", "সহিহ বুখারি 1180; সহিহ মুসলিম 729"], ["আসর", "৪ ফরজ", "এই app-এ কেবল সহিহভাবে স্পষ্ট rawatib তালিকাই দেখানো হয়েছে", "—"], ["মাগরিব", "৩ ফরজ", "২ রাকাত সুন্নাহ পরে", "সহিহ বুখারি 1180; সহিহ মুসলিম 729"], ["ইশা", "৪ ফরজ", "২ রাকাত সুন্নাহ পরে; এরপর বিতর আলাদা সালাত", "সহিহ বুখারি 1180; সহিহ মুসলিম 729"]];
+const PRAYERS=[
+ {name:"ফজর",note:"সবচেয়ে জোরালো সুন্নাহগুলোর একটি",parts:[{n:2,t:"সুন্নাহ",k:"emph",d:"ফরজের আগে"},{n:2,t:"ফরজ",k:"fard",d:"জামাতে অগ্রাধিকার"}],refs:["সহিহ বুখারি 1180–1181","জামে তিরমিযি 415"],urls:["https://sunnah.com/bukhari:1180","https://sunnah.com/tirmidhi:415"]},
+ {name:"যোহর",note:"Rawatib-এর ১২ রাকাতের বর্ণনা অনুযায়ী",parts:[{n:4,t:"সুন্নাহ",k:"emph",d:"ফরজের আগে"},{n:4,t:"ফরজ",k:"fard",d:"মূল সালাত"},{n:2,t:"সুন্নাহ",k:"emph",d:"ফরজের পরে"},{n:2,t:"নফল",k:"opt",d:"ঐচ্ছিক; ৪ পরে পূর্ণ করতে"}],refs:["জামে তিরমিযি 415 (৪ আগে + ২ পরে)","সুনান ইবন মাজাহ 1160 (৪ আগে + ৪ পরে; Sahih grading)","সহিহ বুখারি 1180–1181-এ ২ আগে + ২ পরে বর্ণনাও আছে"],urls:["https://sunnah.com/tirmidhi:415","https://sunnah.com/ibnmajah:1160","https://sunnah.com/bukhari:1180"]},
+ {name:"আসর",note:"ফরজের আগে ৪ রাকাত ঐচ্ছিক সুন্নাহ",parts:[{n:4,t:"সুন্নাহ",k:"opt",d:"গায়রে মুয়াক্কাদাহ/ঐচ্ছিক"},{n:4,t:"ফরজ",k:"fard",d:"মূল সালাত"}],refs:["সুনান আবু দাউদ 1271 — ৪ রাকাত আগে; Hasan grading","সহিহ বুখারি 586 — ফরজের পরে সূর্যাস্ত পর্যন্ত সাধারণ নফল নয়"],urls:["https://sunnah.com/abudawud:1271","https://sunnah.com/bukhari:586"]},
+ {name:"মাগরিব",note:"ফরজ ৩ রাকাত",parts:[{n:2,t:"নফল",k:"opt",d:"ফরজের আগে—ইচ্ছুক হলে"},{n:3,t:"ফরজ",k:"fard",d:"মূল সালাত"},{n:2,t:"সুন্নাহ",k:"emph",d:"ফরজের পরে"}],refs:["সহিহ বুখারি 1183 — ফরজের আগে ‘যে চাই’","সহিহ বুখারি 1180–1181 / তিরমিযি 415 — ২ পরে"],urls:["https://sunnah.com/bukhari:1183","https://sunnah.com/bukhari:1180","https://sunnah.com/tirmidhi:415"]},
+ {name:"ইশা",note:"ফরজের পর সুন্নাহ; রাতের শেষে বিতর উত্তম",parts:[{n:2,t:"নফল",k:"opt",d:"আযান-ইকামতের মাঝে ইচ্ছুক হলে"},{n:4,t:"ফরজ",k:"fard",d:"মূল সালাত"},{n:2,t:"সুন্নাহ",k:"emph",d:"ফরজের পরে"},{n:"1/3+",t:"বিতর",k:"opt",d:"রাতের শেষ সালাত করা উত্তম"}],refs:["সহিহ বুখারি 627 — আযান ও ইকামতের মাঝে ঐচ্ছিক সালাত","সহিহ বুখারি 1180–1181 / তিরমিযি 415 — ২ পরে","সহিহ বুখারি 990 ও 998 — বিতর সম্পর্কে"],urls:["https://sunnah.com/bukhari:627","https://sunnah.com/bukhari:1180","https://sunnah.com/bukhari:990","https://sunnah.com/bukhari:998"]}
+];
+const FARD_MAP=[
+ {title:"২ রাকাত ফরজ",used:"ফজর",lines:["১ম: ফাতিহা + সূরা → রুকু → ২ সিজদা","২য়: ফাতিহা + সূরা → রুকু → ২ সিজদা → তাশাহহুদ + দরুদ + দোয়া → সালাম"]},
+ {title:"৩ রাকাত ফরজ",used:"মাগরিব",lines:["১ম: ফাতিহা + সূরা → রুকু → ২ সিজদা","২য়: ফাতিহা + সূরা → রুকু → ২ সিজদা → প্রথম তাশাহহুদ","৩য়: ফাতিহা → রুকু → ২ সিজদা → শেষ বৈঠক → সালাম"]},
+ {title:"৪ রাকাত ফরজ",used:"যোহর, আসর, ইশা",lines:["১ম–২য়: ফাতিহা + সূরা; ২য় শেষে প্রথম তাশাহহুদ","৩য়–৪র্থ: ফাতিহা; ৪র্থ শেষে তাশাহহুদ + দরুদ + দোয়া → সালাম"]}
+];
 const TOTAL=DAILY.length;
 const keyDate=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
@@ -138,7 +156,15 @@ function calcStreak(){const h=history();let d=new Date(),st=0;for(let i=0;i<366;
 function simpleRender(arr,id){
  const box=document.getElementById(id);box.innerHTML='';arr.forEach(x=>{const w=document.createElement('div');w.innerHTML=cardHtml(x,false,{});const c=w.firstElementChild;c.querySelector('.toggle').onclick=()=>c.classList.toggle('open');box.appendChild(c)})
 }
-function renderWaqt(){const g=document.getElementById('waqtGrid');g.innerHTML='';PRAYERS.forEach(p=>{const d=document.createElement('div');d.className='waqt';d.innerHTML=`<b>${p[0]}</b><span>${p[1]}</span>`;d.onclick=()=>alert(`${p[0]}\n${p[1]}\n${p[2]}\n${p[3]}`);g.appendChild(d)})}
+function renderWaqt(){
+ const g=document.getElementById('prayerStack');g.innerHTML='';
+ PRAYERS.forEach(p=>{const c=document.createElement('div');c.className='prayerCard';
+  const total=p.parts.reduce((a,x)=>a+(typeof x.n==='number'?x.n:0),0);
+  c.innerHTML=`<div class="prayerTop"><div><h3>${p.name}</h3><div class="when">${p.note}</div></div><span class="totalBadge">${total?bn(total)+'+ রাকাত':''}</span></div><div class="seq">${p.parts.map((x,i)=>`${i?'<span class="arrow">→</span>':''}<div class="rak ${x.k}"><strong>${typeof x.n==='number'?bn(x.n):x.n}</strong>${x.t}<small>${x.d}</small></div>`).join('')}</div><div class="evidence">${p.refs.map((r,i)=>`${i?' • ':''}<a href="${p.urls[Math.min(i,p.urls.length-1)]}" target="_blank" rel="noopener">${r} ↗</a>`).join('')}</div>`;
+  g.appendChild(c);
+ });
+ const fm=document.getElementById('fardMap');fm.innerHTML=FARD_MAP.map(m=>`<div class="mapCard"><h3>${m.title}</h3><div class="when">${m.used}</div>${m.lines.map((x,i)=>`<div class="mapLine"><b>${bn(i+1)}.</b> ${x}</div>`).join('')}</div>`).join('');
+}
 const steps=[
 ['১. তাকবিরে তাহরিমা','কিবলামুখী হয়ে “আল্লাহু আকবার” বলে সালাত শুরু করুন।'],
 ['২. কিয়াম ও কিরাআত','প্রথম দুই রাকাতে সূরা ফাতিহা পড়ুন; এরপর কুরআনের অংশ পড়ুন। ফাতিহা সালাতের মৌলিক কিরাআত।'],
@@ -167,7 +193,7 @@ let tc=Number(localStorage.getItem('tas-count')||0);const showTas=()=>document.g
 document.getElementById('themeBtn').onclick=()=>{const n=document.documentElement.dataset.theme==='dark'?'':'dark';document.documentElement.dataset.theme=n;localStorage.setItem('theme',n)};
 const savedTheme=localStorage.getItem('theme');if(savedTheme)document.documentElement.dataset.theme=savedTheme;
 document.getElementById('fontRange').oninput=e=>{document.documentElement.style.setProperty('--ar',e.target.value+'px');localStorage.setItem('ar-size',e.target.value)};const as=localStorage.getItem('ar-size');if(as){document.documentElement.style.setProperty('--ar',as+'px');document.getElementById('fontRange').value=as}
-document.getElementById('backup').onclick=()=>{const data={version:2,history:history(),tas:tc,theme:localStorage.getItem('theme')||'',arSize:localStorage.getItem('ar-size')||26,daily:{}};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('amal-20'))data.daily[k]=JSON.parse(localStorage.getItem(k)||'{}')}const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='amar-amal-backup.json';a.click();URL.revokeObjectURL(a.href)};
+document.getElementById('backup').onclick=()=>{const data={version:4,history:history(),tas:tc,theme:localStorage.getItem('theme')||'',arSize:localStorage.getItem('ar-size')||26,daily:{}};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('amal-20'))data.daily[k]=JSON.parse(localStorage.getItem(k)||'{}')}const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='amar-amal-backup.json';a.click();URL.revokeObjectURL(a.href)};
 document.getElementById('restoreBtn').onclick=()=>document.getElementById('restoreFile').click();document.getElementById('restoreFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.history)localStorage.setItem('amal-history',JSON.stringify(d.history));Object.entries(d.daily||{}).forEach(([k,v])=>localStorage.setItem(k,JSON.stringify(v)));if(d.tas!==undefined)localStorage.setItem('tas-count',d.tas);alert('Restore complete. App reload হবে।');location.reload()}catch(_ ){alert('Backup file সঠিক নয়।')}};r.readAsText(f)};
 document.getElementById('resetBtn').onclick=()=>{if(confirm('আজকের সব check মুছে ফেলবেন?')){localStorage.removeItem('amal-'+keyDate());const h=history();delete h[keyDate()];localStorage.setItem('amal-history',JSON.stringify(h));renderDaily();renderHistory()}};
 let installPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});document.getElementById('installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null}else alert(/iPhone|iPad|iPod/.test(navigator.userAgent)?'iPhone/iPad: Safari → Share → Add to Home Screen ব্যবহার করুন।':'Chrome menu → Add to Home screen / Install app ব্যবহার করুন।')};

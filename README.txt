@@ -1,18 +1,6 @@
-আমার আমল v3
+আমার আমল v4
 
-Mobile-first installable PWA for Android and iPhone/iPad.
-
-Android: Chrome -> Install app / Add to Home screen.
-iPhone/iPad: Safari -> Share -> Add to Home Screen.
-
-New in v3:
-- Daily Amal kept simple
-- Basic Salah section
-- Adhan, Adhan response, after-Adhan dua
-- Fajr Adhan extra phrase
-- Witr Qunut (Tirmidhi 464, labelled Hasan)
-- Wudu/Qibla/prayer-time basics with Qur'an references
-- iOS standalone metadata + Apple touch icon
-- Offline service-worker cache
-
-Religious note: Bengali pronunciation is only a learning aid. Verify recitation with a qualified teacher.
+- আজকের আমল অংশের checklist/content অপরিবর্তিত রাখা হয়েছে।
+- সালাত গাইডে ওয়াক্তভিত্তিক রাকাত sequence, ফরজ রাকাত map, দলিল ও মতভেদের সতর্কতা যোগ হয়েছে।
+- Android/iOS installable PWA; static/offline-first; localStorage history.
+- Arabic/Bangla pronunciation is a learning aid; verify recitation with a qualified teacher.
